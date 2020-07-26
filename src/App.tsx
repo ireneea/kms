@@ -7,6 +7,7 @@ import Container from "@material-ui/core/Container";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 
 import Search from "./components/Search";
+import Header from "./components/Header";
 import { WordType } from "./ts/appTypes";
 import { words } from "./constants";
 
@@ -17,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.text.secondary,
     },
     searchGrid: {
-      marginTop: theme.spacing(1),
+      marginTop: theme.spacing(2),
     },
   })
 );
@@ -45,25 +46,28 @@ function App() {
     let filtered = [...words];
 
     if (searchText) {
-      filtered = words.filter((word) => word.concept.toLocaleLowerCase().includes(searchText));
+      filtered = words.filter((word) => word.concept.toLowerCase().includes(searchText.toLowerCase()));
     }
 
     return filtered;
   };
 
   return (
-    <Container maxWidth="md">
-      <Grid container spacing={2} direction="column">
-        <Grid item xs={12} className={classes.searchGrid}>
-          <Search searchText={searchText} onChange={onSearch} />
+    <React.Fragment>
+      <Header />
+      <Container maxWidth="md">
+        <Grid container spacing={2} direction="column">
+          <Grid item xs={12} className={classes.searchGrid}>
+            <Search searchText={searchText} onChange={onSearch} />
+          </Grid>
+          <Grid container item spacing={1} direction="column">
+            {filterWords().map((word) => (
+              <Word {...word} />
+            ))}
+          </Grid>
         </Grid>
-        <Grid container item spacing={1} direction="column">
-          {filterWords().map((word) => (
-            <Word {...word} />
-          ))}
-        </Grid>
-      </Grid>
-    </Container>
+      </Container>
+    </React.Fragment>
   );
 }
 

@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function CustomizedInputBase(props: Prop) {
+export default function Search(props: Prop) {
   const classes = useStyles();
 
   const { searchText, onChange } = props;
