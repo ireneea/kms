@@ -1,48 +1,17 @@
 import React from "react";
 
-import { Link as RouterLink, LinkProps as RouterLinkProps } from "react-router-dom";
-
 import Drawer from "@material-ui/core/Drawer";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 
 import Header from "./Header";
+import ListItemLink from "../shared/ListItemLink";
 
 import { DRAWER_WIDTH } from "../../constants";
-
-interface ListItemLinkProps {
-  icon?: React.ReactElement;
-  primary: string;
-  to: string;
-}
-
-function ListItemLink(props: ListItemLinkProps) {
-  const { icon, primary, to } = props;
-
-  const renderLink = React.useMemo(
-    () =>
-      React.forwardRef<any, Omit<RouterLinkProps, "to">>((itemProps, ref) => (
-        <RouterLink to={to} ref={ref} {...itemProps} />
-      )),
-    [to]
-  );
-
-  return (
-    <li>
-      <ListItem button component={renderLink}>
-        {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
-        <ListItemText primary={primary} />
-      </ListItem>
-    </li>
-  );
-}
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

@@ -5,9 +5,8 @@ import Container from "@material-ui/core/Container";
 
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
 
+import ListItemLink from "../shared/ListItemLink";
 import Page from "../Page/Page";
 
 import Search from "./Search";
@@ -56,9 +55,12 @@ const WordsPage: React.FC<Prop> = (props) => {
           <Grid item xs={12} spacing={1} direction="column">
             <List>
               {filterWords().map((word) => (
-                <ListItem key={word.concept}>
-                  <ListItemText primary={word.concept} secondary={word.definition} />
-                </ListItem>
+                <ListItemLink
+                  primary={word.concept}
+                  secondary={word.definition}
+                  key={word.concept}
+                  to={`/words/${word.concept}`}
+                />
               ))}
             </List>
           </Grid>
