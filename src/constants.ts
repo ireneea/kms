@@ -1,5 +1,7 @@
 import { WordType } from "./ts/appTypes";
 
+export const DRAWER_WIDTH = 240;
+
 export const words: WordType[] = [
   {
     concept: "agitated",

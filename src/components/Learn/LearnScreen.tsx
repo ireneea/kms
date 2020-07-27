@@ -1,9 +1,24 @@
 import React from "react";
 
+import Grid from "@material-ui/core/Grid";
+import Container from "@material-ui/core/Container";
+
+import Page from "../Page/Page";
+
 type Prop = {};
 
 const LearnScreen: React.FC<Prop> = () => {
-  return <div>LearnScreen</div>;
+  return (
+    <Page>
+      <Container maxWidth="md">
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            LearnScreen
+          </Grid>
+        </Grid>
+      </Container>
+    </Page>
+  );
 };
 
 LearnScreen.propTypes = {};

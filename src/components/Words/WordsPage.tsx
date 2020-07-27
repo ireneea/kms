@@ -6,7 +6,7 @@ import Container from "@material-ui/core/Container";
 
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 
-import Screen from "../Screen";
+import Page from "../Page/Page";
 
 import Search from "./Search";
 import { WordType } from "../../ts/appTypes";
@@ -37,7 +37,7 @@ const Word = (word: WordType) => {
 
 type Prop = {};
 
-const WordsScreen: React.FC<Prop> = (props) => {
+const WordsPage: React.FC<Prop> = (props) => {
   const classes = useStyles();
   const [searchText, setSearchText] = React.useState("");
 
@@ -56,7 +56,7 @@ const WordsScreen: React.FC<Prop> = (props) => {
   };
 
   return (
-    <Screen>
+    <Page>
       <Container maxWidth="md">
         <Grid container spacing={2} direction="column">
           <Grid item xs={12} className={classes.searchGrid}>
@@ -64,13 +64,13 @@ const WordsScreen: React.FC<Prop> = (props) => {
           </Grid>
           <Grid container item spacing={1} direction="column">
             {filterWords().map((word) => (
-              <Word {...word} />
+              <Word {...word} key={word.concept} />
             ))}
           </Grid>
         </Grid>
       </Container>
-    </Screen>
+    </Page>
   );
 };
 
-export default WordsScreen;
+export default WordsPage;
