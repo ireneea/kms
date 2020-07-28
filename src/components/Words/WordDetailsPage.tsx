@@ -41,6 +41,7 @@ const WordDetailsPage: React.FC<RouteComponentProps<Prop>> = (props) => {
 
   React.useEffect(() => {
     const loadWords = async () => {
+      // OPTIMIZE: handle error
       const data = await getWordById(id);
       setWord(data);
     };

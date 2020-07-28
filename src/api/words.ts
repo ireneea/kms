@@ -365,7 +365,8 @@ export const getById = async (id: string) => {
 
 export const addWord = async (word: TWord) => {
   await sleep(200);
-  words = [...words, word];
+
+  words = [word, ...words];
   return words;
 };
 
@@ -374,5 +375,3 @@ export const removeWord = async (word: TWord) => {
   words = words.filter((w) => w.id !== word.id);
   return words;
 };
-
-const temporisation = () => {};
