@@ -6,12 +6,13 @@ import Container from "@material-ui/core/Container";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 
+import { TWord } from "../../ts/appTypes";
+
+import { getAll as getAllWords } from "../../api/words";
+
 import ListItemLink from "../shared/ListItemLink";
 import Page from "../Page/Page";
-
 import Search from "./Search";
-import { WordType } from "../../ts/appTypes";
-import { words } from "../../constants";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -28,14 +29,26 @@ const useStyles = makeStyles((theme: Theme) =>
 type Prop = {};
 
 const WordsPage: React.FC<Prop> = (props) => {
+  // OPTIMIZE: add a loading indicator
+
   const classes = useStyles();
   const [searchText, setSearchText] = React.useState("");
+  const [words, setWords] = React.useState((): TWord[] => []);
+
+  React.useEffect(() => {
+    const loadWords = async () => {
+      const data = await getAllWords();
+      setWords(data);
+    };
+
+    loadWords();
+  }, []);
 
   const onSearch = (search: string) => {
     setSearchText(search);
   };
 
-  const filterWords = (): WordType[] => {
+  const filterWords = (): TWord[] => {
     let filtered = [...words];
 
     if (searchText) {

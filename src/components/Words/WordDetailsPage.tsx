@@ -10,9 +10,11 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 
+import { TWord } from "../../ts/appTypes";
 import Page from "../Page/Page";
 import LinkRouter from "../shared/LinkRouter";
-import { words } from "../../constants";
+
+import { getById as getWordById } from "../../api/words";
 
 const useStyles = makeStyles((theme) => ({
   breadcrumbs: {
@@ -31,10 +33,20 @@ type Prop = {
 };
 
 const WordDetailsPage: React.FC<RouteComponentProps<Prop>> = (props) => {
+  // OPTIMIZE: pass the word inside tha router state
   const classes = useStyles();
   const id = props.match.params.id;
 
-  const word = words.find((w) => w.id === id);
+  const [word, setWord] = React.useState((): TWord | undefined => undefined);
+
+  React.useEffect(() => {
+    const loadWords = async () => {
+      const data = await getWordById(id);
+      setWord(data);
+    };
+
+    loadWords();
+  }, [id]);
 
   return (
     <Page>
