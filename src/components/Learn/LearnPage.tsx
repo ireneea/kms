@@ -7,7 +7,7 @@ import Page from "../Page/Page";
 
 type Prop = {};
 
-const LearnScreen: React.FC<Prop> = () => {
+const LearnPage: React.FC<Prop> = () => {
   return (
     <Page>
       <Container maxWidth="md">
@@ -21,6 +21,4 @@ const LearnScreen: React.FC<Prop> = () => {
   );
 };
 
-LearnScreen.propTypes = {};
-
-export default LearnScreen;
+export default LearnPage;
