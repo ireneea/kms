@@ -3,19 +3,16 @@ import React from "react";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import InputBase from "@material-ui/core/InputBase";
-import AddIcon from "@material-ui/icons/Add";
 
 import { TWord } from "../../ts/appTypes";
 
 import { getAll as getAllWords, addWord } from "../../api/words";
 
-import ListItemLink from "../shared/ListItemLink";
 import Page from "../Page/Page";
 import Search from "./Search";
+import WordList from "./WordList";
+import AddWord from "./AddWord";
+import useApiCall from "../../hooks/useApiCall";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -44,115 +41,52 @@ const getNewWord = (): TWord => {
 
 type Prop = {};
 
+/**
+ * `WordListPage` displays all the words of the users dictionary
+ */
 const WordListPage: React.FC<Prop> = () => {
   const classes = useStyles();
   const [searchText, setSearchText] = React.useState("");
   const [words, setWords] = React.useState((): TWord[] => []);
-  const [isAdding, setIsAdding] = React.useState(false);
-  const [newWord, setNewWord] = React.useState((): TWord | undefined => undefined);
+  const [newWord, setNewWord] = React.useState(getNewWord);
   // OPTIMIZE: add a loading indicator
-  const [loading, setLoading] = React.useState(false);
+  // OPTIMIZE: handle error gracefully
+  const { lastResponse, lastError, isLoading: isApiLoading, callApi } = useApiCall();
 
   React.useEffect(() => {
-    const loadWords = async () => {
-      await loadData(async () => {
-        const data = await getAllWords();
-        setWords(data);
-      });
+    const load = async () => {
+      const data = await getAllWords();
+      setWords(data);
     };
 
-    loadWords();
+    callApi(load);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onSearch = (search: string) => {
     setSearchText(search);
   };
 
-  const onAddNewWord = () => {
-    setIsAdding(true);
-    setNewWord(getNewWord());
-  };
-
-  const loadData = async (loader: () => Promise<any>) => {
-    try {
-      setLoading(true);
-      await loader();
-    } catch (error) {
-      // TODO: handle the error gracefully
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const onSaveNewWord = async () => {
-    await loadData(async () => {
+  const onWordInputKeyDown: React.KeyboardEventHandler = (event) => {
+    const saveNewWord = async () => {
       if (newWord) {
         const data = await addWord(newWord);
         setWords(data);
-        setIsAdding(false);
-        setNewWord(undefined);
+        setNewWord(getNewWord());
       }
-    });
-  };
+    };
 
-  const onInputKeyDown: React.KeyboardEventHandler = (event) => {
-    if (event.key === "Enter") {
-      onSaveNewWord();
+    if (event.key === "Enter" && newWord.concept) {
+      callApi(saveNewWord);
     }
   };
 
-  const onNewWordFieldChange = (value: string, fieldName: string) => {
+  const onWordInputChange = (value: string) => {
     if (newWord) {
       const updatedWord = { ...newWord };
-      if (fieldName === "concept") {
-        updatedWord.concept = value;
-      } else if (fieldName === "definition") {
-        updatedWord.definition = value;
-      }
+      updatedWord.concept = value;
       setNewWord(updatedWord);
     }
-  };
-
-  const filterWords = (): TWord[] => {
-    let filtered = [...words];
-
-    if (searchText) {
-      filtered = words.filter((word) => word.concept.toLowerCase().includes(searchText.toLowerCase()));
-    }
-
-    return filtered;
-  };
-
-  const renderNewWordListItem = () => {
-    let result;
-    if (isAdding) {
-      result = (
-        <ListItem className={classes.newWordListItem}>
-          <Grid container direction="column">
-            <Grid item xs={12}>
-              <InputBase
-                placeholder="new word"
-                inputProps={{ "aria-label": "new word" }}
-                name="concept"
-                onChange={(event) => onNewWordFieldChange(event.target.value, event.target.name)}
-                onKeyDown={onInputKeyDown}
-                disabled={loading}
-                autoFocus
-              />
-            </Grid>
-          </Grid>
-        </ListItem>
-      );
-    } else {
-      result = (
-        <ListItem button className={classes.newWordListItem} onClick={onAddNewWord}>
-          <ListItemIcon>
-            <AddIcon />
-          </ListItemIcon>
-        </ListItem>
-      );
-    }
-    return result;
   };
 
   return (
@@ -163,17 +97,13 @@ const WordListPage: React.FC<Prop> = () => {
             <Search searchText={searchText} onChange={onSearch} />
           </Grid>
           <Grid item xs={12}>
-            <List>
-              {renderNewWordListItem()}
-              {filterWords().map((word) => (
-                <ListItemLink
-                  primary={word.concept}
-                  secondary={word.definition}
-                  key={word.concept}
-                  to={`/words/${word.id}`}
-                />
-              ))}
-            </List>
+            <AddWord
+              onKeyDown={onWordInputKeyDown}
+              word={newWord?.concept || ""}
+              onChange={onWordInputChange}
+              disabled={isApiLoading}
+            />
+            <WordList words={words} searchText={searchText} />
           </Grid>
         </Grid>
       </Container>
