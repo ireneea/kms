@@ -3,7 +3,7 @@ import _take from "lodash/take";
 
 import { TWord, TCard } from "../ts/appTypes";
 
-let words: TWord[] = [
+const DEFAULT_WORDS: TWord[] = [
   {
     id: "agitated",
     concept: "agitated",
@@ -352,36 +352,59 @@ let words: TWord[] = [
   },
 ];
 
+const saveWords = (words: TWord[]) => {
+  window.localStorage.setItem("words", JSON.stringify(words));
+};
+
+const fetchWords = (): TWord[] => {
+  let data: TWord[] = [];
+  const storage = window.localStorage.getItem("words");
+  if (storage) {
+    data = JSON.parse(storage);
+  } else {
+    saveWords(DEFAULT_WORDS);
+    data = [...DEFAULT_WORDS];
+  }
+
+  return data;
+};
+
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export const getAll = async (): Promise<TWord[]> => {
   await sleep(400);
-  return words;
+  return fetchWords();
 };
 
 export const getById = async (id: string): Promise<TWord | undefined> => {
   await sleep(50);
+  const words = fetchWords();
   return words.find((w) => w.id === id);
 };
 
 export const addWord = async (word: TWord): Promise<TWord[]> => {
   await sleep(200);
 
+  let words = fetchWords();
   words = [word, ...words];
+  saveWords(words);
   return words;
 };
 
 export const getCards = async (limit: number = 10): Promise<TCard[]> => {
   await sleep(50);
   // OPTIMIZE: check that limit is a positive number
+  const words = fetchWords();
   const subset = _take(words, limit);
   return subset.map((word: TWord) => ({ dueDate: moment(), front: word.concept, back: word.definition }));
 };
 
 export const removeWord = async (word: TWord) => {
   await sleep(200);
+  let words = fetchWords();
   words = words.filter((w) => w.id !== word.id);
+  saveWords(words);
   return words;
 };
