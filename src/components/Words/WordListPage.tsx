@@ -6,7 +6,7 @@ import Container from "@material-ui/core/Container";
 
 import { TWord } from "../../ts/appTypes";
 
-import { getAll as getAllWords, addWord } from "../../api/words";
+import { getAllWords, addWord } from "../../api/words";
 
 import Page from "../Page/Page";
 import Search from "./Search";

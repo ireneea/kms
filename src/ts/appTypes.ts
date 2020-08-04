@@ -1,16 +1,19 @@
 import { Moment } from "moment";
 
 export type TWord = {
-  id: string;
+  id?: string;
   concept: string;
   definition: string;
   example?: string;
+  cards?: string[];
 };
 
 export type TCard = {
+  id?: string;
   dueDate: Moment;
   front: string;
   back: string;
+  wordId?: string;
 };
 
 export enum Answer {

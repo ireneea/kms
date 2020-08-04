@@ -1,5 +1,6 @@
 import moment from "moment";
 import _take from "lodash/take";
+import { v4 as uuidv4 } from "uuid";
 
 import { TWord, TCard } from "../ts/appTypes";
 
@@ -352,29 +353,61 @@ const DEFAULT_WORDS: TWord[] = [
   },
 ];
 
+const getNewCard = (word: TWord): TCard => ({
+  id: uuidv4(),
+  dueDate: moment(),
+  front: word.concept,
+  back: word.definition,
+  wordId: word.id,
+});
+
+const initialiseStorage = () => {
+  const words: TWord[] = [];
+  const cards: TCard[] = [];
+
+  for (let i = 0; i < DEFAULT_WORDS.length; i++) {
+    const word = DEFAULT_WORDS[i];
+    const card = getNewCard(word);
+    cards.push(card);
+    words.push({ ...word, id: uuidv4(), cards: card.id ? [card.id] : [] });
+  }
+
+  saveWords(words);
+  saveCards(cards);
+};
+
 const saveWords = (words: TWord[]) => {
   window.localStorage.setItem("words", JSON.stringify(words));
 };
 
-const fetchWords = (): TWord[] => {
-  let data: TWord[] = [];
-  const storage = window.localStorage.getItem("words");
+const saveCards = (cards: TCard[]) => {
+  window.localStorage.setItem("cards", JSON.stringify(cards));
+};
+
+const fetchByKey = (key: string) => {
+  if (!window.localStorage.getItem(key)) {
+    initialiseStorage();
+  }
+
+  let data = [];
+  const storage = window.localStorage.getItem(key);
   if (storage) {
     data = JSON.parse(storage);
-  } else {
-    saveWords(DEFAULT_WORDS);
-    data = [...DEFAULT_WORDS];
   }
 
   return data;
 };
 
+const fetchWords = (): TWord[] => fetchByKey("words");
+
+const fetchCard = (): TCard[] => fetchByKey("cards");
+
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export const getAll = async (): Promise<TWord[]> => {
-  await sleep(400);
+export const getAllWords = async (): Promise<TWord[]> => {
+  await sleep(200);
   return fetchWords();
 };
 
@@ -387,18 +420,18 @@ export const getById = async (id: string): Promise<TWord | undefined> => {
 export const addWord = async (word: TWord): Promise<TWord[]> => {
   await sleep(200);
 
-  let words = fetchWords();
-  words = [word, ...words];
-  saveWords(words);
-  return words;
-};
+  const newWord = { ...word, id: uuidv4() };
+  const card = getNewCard(word);
+  newWord.cards = card.id ? [card.id] : [];
 
-export const getCards = async (limit: number = 10): Promise<TCard[]> => {
-  await sleep(50);
-  // OPTIMIZE: check that limit is a positive number
-  const words = fetchWords();
-  const subset = _take(words, limit);
-  return subset.map((word: TWord) => ({ dueDate: moment(), front: word.concept, back: word.definition }));
+  let words = fetchWords();
+  words = [newWord, ...words];
+  saveWords(words);
+
+  let cards = fetchCard();
+  cards = [card, ...cards];
+  saveCards(cards);
+  return words;
 };
 
 export const removeWord = async (word: TWord) => {
@@ -407,4 +440,17 @@ export const removeWord = async (word: TWord) => {
   words = words.filter((w) => w.id !== word.id);
   saveWords(words);
   return words;
+};
+
+export const getAllCards = async (): Promise<TCard[]> => {
+  await sleep(200);
+  return fetchCard();
+};
+
+export const getCards = async (limit: number = 10): Promise<TCard[]> => {
+  await sleep(50);
+  // OPTIMIZE: check that limit is a positive number
+  const cards = fetchCard();
+  const subset = _take(cards, limit);
+  return subset;
 };
