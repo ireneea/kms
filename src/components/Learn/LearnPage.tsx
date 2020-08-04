@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const PRACTICE_SIZE = 10;
+const PRACTICE_SIZE = 2;
 
 type Prop = {};
 
@@ -45,8 +45,8 @@ const LearnPage: React.FC<Prop> = () => {
   }, []);
 
   React.useEffect(() => {
-    setCurrentCardIndex(0);
     setGameOver(false);
+    setCurrentCardIndex(0);
   }, [cards]);
 
   React.useEffect(() => {
@@ -98,7 +98,9 @@ const LearnPage: React.FC<Prop> = () => {
                 onAnswer={onAnswer}
               />
             ) : null}
-            {gameOver ? <CongratulationCard onPracticeMore={onPracticeMore} words={cards.length} /> : null}
+            {gameOver && !isApiLoading ? (
+              <CongratulationCard onPracticeMore={onPracticeMore} words={cards.length} />
+            ) : null}
           </Grid>
         </Grid>
       </Container>

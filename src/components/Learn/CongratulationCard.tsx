@@ -6,6 +6,10 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import EmojiEventsIcon from "@material-ui/icons/EmojiEvents";
+import ThumbUpIcon from "@material-ui/icons/ThumbUp";
+
+import _sample from "lodash/sample";
+
 import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -21,6 +25,9 @@ const useStyles = makeStyles((theme: Theme) =>
     cardContent: {
       textAlign: "center",
     },
+    successEmoji: {
+      marginBottom: theme.spacing(2),
+    },
   })
 );
 
@@ -34,10 +41,23 @@ const CongratulationCard: React.FC<Props> = (props) => {
 
   const { onPracticeMore, words } = props;
 
+  const renderIcon = () => {
+    const emojis = ["💪", "🚀", "🔥", "🧠", "😎", "🤓", "📚", "🥇", "🏅", "🏆", "🎓", "✔️", "✨", "🌟", "🎉"];
+    const emoji = _sample(emojis);
+
+    return (
+      <Typography variant="h1" className={classes.successEmoji}>
+        <span role="img" aria-label="Muscle">
+          {emoji}
+        </span>
+      </Typography>
+    );
+  };
+
   return (
     <Card className={classes.root}>
       <CardContent className={classes.cardContent}>
-        <EmojiEventsIcon className={classes.icon} />
+        {renderIcon()}
         <Alert severity="success">Congratulations you have practised {words} words</Alert>
       </CardContent>
       <CardActions>
