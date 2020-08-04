@@ -1,4 +1,7 @@
-import { TWord } from "../ts/appTypes";
+import moment from "moment";
+import _take from "lodash/take";
+
+import { TWord, TCard } from "../ts/appTypes";
 
 let words: TWord[] = [
   {
@@ -353,21 +356,28 @@ function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export const getAll = async () => {
+export const getAll = async (): Promise<TWord[]> => {
   await sleep(400);
   return words;
 };
 
-export const getById = async (id: string) => {
+export const getById = async (id: string): Promise<TWord | undefined> => {
   await sleep(50);
   return words.find((w) => w.id === id);
 };
 
-export const addWord = async (word: TWord) => {
+export const addWord = async (word: TWord): Promise<TWord[]> => {
   await sleep(200);
 
   words = [word, ...words];
   return words;
+};
+
+export const getCards = async (limit: number = 10): Promise<TCard[]> => {
+  await sleep(50);
+  // OPTIMIZE: check that limit is a positive number
+  const subset = _take(words, limit);
+  return subset.map((word: TWord) => ({ dueDate: moment(), front: word.concept, back: word.definition }));
 };
 
 export const removeWord = async (word: TWord) => {

@@ -9,6 +9,8 @@ export type TWord = {
 
 export type TCard = {
   dueDate: Moment;
+  front: string;
+  back: string;
 };
 
 export enum Answer {

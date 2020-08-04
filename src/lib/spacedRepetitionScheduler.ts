@@ -1,8 +1,6 @@
 import moment from "moment";
 import { TCard, Answer } from "../ts/appTypes";
 
-const spacedRepetitionScheduler = (card: TCard) => {};
-
 export const getNextDueDate = (card: TCard, answer: Answer): moment.Moment => {
   let dueDate;
   if (answer === Answer.DON_T_KNOW) {
@@ -19,5 +17,3 @@ export const getNextDueDate = (card: TCard, answer: Answer): moment.Moment => {
 
   return dueDate;
 };
-
-export default spacedRepetitionScheduler;

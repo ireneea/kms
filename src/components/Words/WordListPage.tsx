@@ -51,7 +51,7 @@ const WordListPage: React.FC<Prop> = () => {
   const [newWord, setNewWord] = React.useState(getNewWord);
   // OPTIMIZE: add a loading indicator
   // OPTIMIZE: handle error gracefully
-  const { lastResponse, lastError, isLoading: isApiLoading, callApi } = useApiCall();
+  const { isLoading: isApiLoading, callApi } = useApiCall();
 
   React.useEffect(() => {
     const load = async () => {
