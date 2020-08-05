@@ -46,7 +46,6 @@ type Prop = {};
  */
 const WordListPage: React.FC<Prop> = () => {
   const classes = useStyles();
-  const [searchText, setSearchText] = React.useState("");
   const [words, setWords] = React.useState((): TWord[] => []);
   const [newWord, setNewWord] = React.useState(getNewWord);
   // OPTIMIZE: add a loading indicator
@@ -62,10 +61,6 @@ const WordListPage: React.FC<Prop> = () => {
     callApi(load);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const onSearch = (search: string) => {
-    setSearchText(search);
-  };
 
   const onWordInputKeyDown: React.KeyboardEventHandler = (event) => {
     const saveNewWord = async () => {
@@ -93,9 +88,6 @@ const WordListPage: React.FC<Prop> = () => {
     <Page>
       <Container maxWidth="md">
         <Grid container spacing={2} direction="column">
-          <Grid item xs={12} className={classes.searchGrid}>
-            <Search searchText={searchText} onChange={onSearch} />
-          </Grid>
           <Grid item xs={12}>
             <AddWord
               onKeyDown={onWordInputKeyDown}
@@ -103,7 +95,7 @@ const WordListPage: React.FC<Prop> = () => {
               onChange={onWordInputChange}
               disabled={isApiLoading}
             />
-            <WordList words={words} searchText={searchText} />
+            <WordList words={words} searchText={""} />
           </Grid>
         </Grid>
       </Container>

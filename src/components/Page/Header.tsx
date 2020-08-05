@@ -1,12 +1,11 @@
 import React from "react";
 import clsx from "clsx";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import { createStyles, makeStyles, Theme, fade } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
+import InputBase from "@material-ui/core/InputBase";
 
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
+import SearchIcon from "@material-ui/icons/Search";
 
 import { DRAWER_WIDTH } from "../../constants";
 
@@ -15,15 +14,14 @@ const useStyles = makeStyles((theme: Theme) =>
     title: {
       flexGrow: 1,
     },
-    offset: theme.mixins.toolbar,
-    hide: {
-      display: "none",
-    },
     appBar: {
       transition: theme.transitions.create(["margin", "width"], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
       }),
+      borderBottomWidth: 1,
+      borderBottom: "solid",
+      borderBottomColor: theme.palette.grey["300"],
     },
     appBarShift: {
       width: `calc(100% - ${DRAWER_WIDTH}px)`,
@@ -33,43 +31,76 @@ const useStyles = makeStyles((theme: Theme) =>
       }),
       marginLeft: DRAWER_WIDTH,
     },
+    search: {
+      position: "relative",
+      borderRadius: theme.shape.borderRadius,
+      backgroundColor: fade(theme.palette.common.white, 0.15),
+      "&:hover": {
+        backgroundColor: fade(theme.palette.common.white, 0.25),
+      },
+      marginLeft: 0,
+      width: "100%",
+    },
+    searchIcon: {
+      padding: theme.spacing(0, 2),
+      height: "100%",
+      position: "absolute",
+      pointerEvents: "none",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    inputRoot: {
+      color: "inherit",
+      width: "100%",
+    },
+    inputInput: {
+      padding: theme.spacing(1, 1, 1, 0),
+      // vertical padding + font size from searchIcon
+      paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+      transition: theme.transitions.create("width"),
+      width: "100%",
+    },
   })
 );
 
 type Prop = {
-  onMenuClick: () => void;
-  hideMenuIcon: boolean;
+  /**
+   * we need to shift our app bar to the left when the `NavigationDrawer` is Opened
+   */
+  shiftLeft: boolean;
 };
 
 const Header: React.FC<Prop> = (props) => {
   const classes = useStyles();
 
-  const { onMenuClick, hideMenuIcon } = props;
+  const { shiftLeft } = props;
 
   return (
     <>
       <AppBar
         position="fixed"
         className={clsx(classes.appBar, {
-          [classes.appBarShift]: hideMenuIcon,
+          [classes.appBarShift]: shiftLeft,
         })}
+        elevation={0}
       >
         <Toolbar>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer menu"
-            onClick={onMenuClick}
-            className={clsx(hideMenuIcon && classes.hide)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" className={classes.title}>
-            Dico
-          </Typography>
+          <div className={classes.search}>
+            <div className={classes.searchIcon}>
+              <SearchIcon />
+            </div>
+            <InputBase
+              placeholder="Search…"
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput,
+              }}
+              inputProps={{ "aria-label": "search" }}
+            />
+          </div>
         </Toolbar>
       </AppBar>
-      <div className={classes.offset} />
     </>
   );
 };
