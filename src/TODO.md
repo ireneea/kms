@@ -4,6 +4,7 @@
 
 ### Core
 
+- mobile layout
 - Search word
 - Add word modal instead of the inline form
 - Use spaced repetitions
@@ -12,6 +13,7 @@
 
 - Learning statistics
 - Home dashboard
+- Highlight Selected page on the `NavigationDrawer`
 
 ## Refactor
 

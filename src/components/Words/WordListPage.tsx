@@ -8,14 +8,13 @@ import { TWord } from "../../ts/appTypes";
 
 import { getAllWords, addWord } from "../../api/words";
 
-import Page from "../Page/Page";
-import Search from "./Search";
 import WordList from "./WordList";
 import AddWord from "./AddWord";
 import useApiCall from "../../hooks/useApiCall";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    root: {},
     paper: {
       padding: theme.spacing(2),
       color: theme.palette.text.secondary,
@@ -85,21 +84,19 @@ const WordListPage: React.FC<Prop> = () => {
   };
 
   return (
-    <Page>
-      <Container maxWidth="md">
-        <Grid container spacing={2} direction="column">
-          <Grid item xs={12}>
-            <AddWord
-              onKeyDown={onWordInputKeyDown}
-              word={newWord?.concept || ""}
-              onChange={onWordInputChange}
-              disabled={isApiLoading}
-            />
-            <WordList words={words} searchText={""} />
-          </Grid>
+    <Container maxWidth="md" className={classes.root}>
+      <Grid container spacing={2} direction="column">
+        <Grid item xs={12}>
+          <AddWord
+            onKeyDown={onWordInputKeyDown}
+            word={newWord?.concept || ""}
+            onChange={onWordInputChange}
+            disabled={isApiLoading}
+          />
+          <WordList words={words} searchText={""} />
         </Grid>
-      </Container>
-    </Page>
+      </Grid>
+    </Container>
   );
 };
 

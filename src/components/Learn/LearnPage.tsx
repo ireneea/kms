@@ -7,7 +7,6 @@ import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import { Answer, TCard } from "../../ts/appTypes";
 import useApiCall from "../../hooks/useApiCall";
 import { getCards } from "../../api/words";
-import Page from "../Page/Page";
 
 import FlashCard from "./FlashCard";
 import CongratulationCard from "./CongratulationCard";
@@ -85,26 +84,24 @@ const LearnPage: React.FC<Prop> = () => {
   const currentCard = getCurrentCard();
 
   return (
-    <Page>
-      <Container maxWidth="md" className={classes.root}>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            {currentCard && !gameOver ? (
-              <FlashCard
-                front={currentCard.front}
-                back={currentCard.back}
-                onShowBack={onShowDefinition}
-                showBack={showDefinition}
-                onAnswer={onAnswer}
-              />
-            ) : null}
-            {gameOver && !isApiLoading ? (
-              <CongratulationCard onPracticeMore={onPracticeMore} words={cards.length} />
-            ) : null}
-          </Grid>
+    <Container maxWidth="md" className={classes.root}>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          {currentCard && !gameOver ? (
+            <FlashCard
+              front={currentCard.front}
+              back={currentCard.back}
+              onShowBack={onShowDefinition}
+              showBack={showDefinition}
+              onAnswer={onAnswer}
+            />
+          ) : null}
+          {gameOver && !isApiLoading ? (
+            <CongratulationCard onPracticeMore={onPracticeMore} words={cards.length} />
+          ) : null}
         </Grid>
-      </Container>
-    </Page>
+      </Grid>
+    </Container>
   );
 };
 
