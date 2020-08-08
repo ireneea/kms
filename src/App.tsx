@@ -26,12 +26,15 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const App: React.FC<{}> = () => {
   const classes = useStyles();
+  const onAddWord = () => {
+    // TODO: open a modal used to add a new word
+  };
 
   return (
     <Router>
       <div className={classes.root}>
         <Header shiftLeft={true} />
-        <NavigationDrawer />
+        <NavigationDrawer onAddWord={onAddWord} />
         <main className={classes.content}>
           <div className={classes.offset} />
           <Switch>

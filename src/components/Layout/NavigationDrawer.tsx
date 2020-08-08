@@ -1,11 +1,12 @@
 import React from "react";
 
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import { deepPurple } from "@material-ui/core/colors";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
-import { deepPurple } from "@material-ui/core/colors";
+import AddIcon from "@material-ui/icons/Add";
 
 import ListItemLink from "../shared/ListItemLink";
 
@@ -38,10 +39,20 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-type Props = {};
+type Props = {
+  onAddWord: () => void;
+};
 
-const NavigationDrawer: React.FC<Props> = (props) => {
+const DeleteWord: React.FC<{}> = (props) => <>hi</>;
+
+const NavigationDrawer: React.FC<Props> = ({ onAddWord }) => {
   const classes = useStyles();
+
+  const addWord = {
+    actionName: "add word",
+    onClick: onAddWord,
+    icon: <AddIcon />,
+  };
 
   return (
     <Drawer
@@ -59,7 +70,7 @@ const NavigationDrawer: React.FC<Props> = (props) => {
         </Typography>
       </div>
       <List>
-        <ListItemLink to="/words" primary="Words" />
+        <ListItemLink to="/words" primary="Words" secondaryAction={addWord} />
         <ListItemLink to="/learn" primary="Learn" />
       </List>
     </Drawer>

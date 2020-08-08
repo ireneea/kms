@@ -5,16 +5,26 @@ import { Link as RouterLink, LinkProps as RouterLinkProps } from "react-router-d
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import IconButton from "@material-ui/core/IconButton";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 interface ListItemLinkProps {
-  icon?: React.ReactElement;
+  secondaryAction?: {
+    icon: React.ReactNode;
+    actionName: string;
+    onClick: () => void;
+    disabled?: boolean;
+  };
+
+  icon?: React.ReactNode;
   primary: string;
   secondary?: string;
   to: string;
 }
 
 const ListItemLink: React.FC<ListItemLinkProps> = (props) => {
-  const { icon, primary, to, secondary } = props;
+  const { icon, primary, to, secondary, secondaryAction } = props;
 
   const renderLink = React.useMemo(
     () =>
@@ -24,14 +34,33 @@ const ListItemLink: React.FC<ListItemLinkProps> = (props) => {
     [to]
   );
 
-  return (
-    <li>
-      <ListItem button component={renderLink}>
-        {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
-        <ListItemText primary={primary} secondary={secondary} />
-      </ListItem>
-    </li>
+  // OPTIMIZE: check if this function should useCallback to improve performance
+  const renderSecondAction = () => {
+    if (!secondaryAction) {
+      return null;
+    }
+
+    const { icon, actionName, onClick } = secondaryAction;
+
+    return (
+      <ListItemSecondaryAction>
+        <IconButton edge="end" aria-label={actionName} onClick={onClick}>
+          {icon}
+        </IconButton>
+      </ListItemSecondaryAction>
+    );
+  };
+
+  // OPTIMIZE: check if this function should useCallback to improve performance
+  const renderListItem = () => (
+    <ListItem button component={renderLink}>
+      {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
+      <ListItemText primary={primary} secondary={secondary} />
+      {renderSecondAction()}
+    </ListItem>
   );
+
+  return secondaryAction ? renderListItem() : <li>{renderListItem()}</li>;
 };
 
 export default ListItemLink;
