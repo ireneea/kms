@@ -43,8 +43,6 @@ type Props = {
   onAddWord: () => void;
 };
 
-const DeleteWord: React.FC<{}> = (props) => <>hi</>;
-
 const NavigationDrawer: React.FC<Props> = ({ onAddWord }) => {
   const classes = useStyles();
 
