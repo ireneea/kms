@@ -43,6 +43,7 @@ type Feedback = {
 const App: React.FC<{}> = () => {
   // TODO: mobile layout
   // TODO: remove word
+  // TODO: show selected word on the side
   const classes = useStyles();
 
   const [words, setWords] = React.useState((): TWord[] => []);
@@ -52,6 +53,7 @@ const App: React.FC<{}> = () => {
   const [snackbarOpened, setSnackbarOpened] = React.useState(false);
   const [newWord, setNewWord] = React.useState(getEmptyWord);
   const [searchText, setSearchText] = React.useState("");
+  const [selectedWord, setSelectedWord] = React.useState<TWord | undefined>(undefined);
 
   const handleLoadSuccess = React.useCallback((data: TWord[]) => {
     setWords(data);
@@ -121,10 +123,16 @@ const App: React.FC<{}> = () => {
     closeDialog();
   };
 
-  const renderWordsList = React.useCallback(() => <WordList words={words} searchText={searchText} />, [
-    words,
-    searchText,
-  ]);
+  const handleSelectWord = React.useCallback((word: TWord) => {
+    setSelectedWord(word);
+  }, []);
+
+  const renderWordsList = React.useCallback(
+    () => (
+      <WordList words={words} searchText={searchText} handleSelectWord={handleSelectWord} selectedWord={selectedWord} />
+    ),
+    [words, searchText, handleSelectWord, selectedWord]
+  );
 
   const handleSearchChange = (value: string) => {
     setSearchText(value);
