@@ -42,75 +42,58 @@ type Feedback = {
 
 const App: React.FC<{}> = () => {
   // TODO: mobile layout
-  // TODO: Consolidate api statuses and error in state
   const classes = useStyles();
 
+  const [words, setWords] = React.useState((): TWord[] => []);
+  // OPTIMIZE: create a useFeedback hook and maybe combine it with the `AppProcessFeedback` component
+  const [feedback, setFeedback] = React.useState<Feedback | undefined>(undefined);
   const [dialogOpened, setDialogOpened] = React.useState(false);
   const [snackbarOpened, setSnackbarOpened] = React.useState(false);
-  const getAllWordsApi = useAsync<TWord[], string>(getAllWords);
-  const addWordApi = useAsync<TWord[], string>(addWord);
-
-  const [words, setWords] = React.useState((): TWord[] => []);
   const [newWord, setNewWord] = React.useState(getEmptyWord);
 
-  const [feedback, setFeedback] = React.useState<Feedback | undefined>(undefined);
+  const handleLoadSuccess = React.useCallback((data: TWord[]) => {
+    setWords(data);
+  }, []);
 
-  /**
-   * Loads all the words on the first render
-   */
+  const handleLoadError = React.useCallback((error: string) => {
+    setFeedback({
+      type: "error",
+      message: error || "Load Failed: Unexpected Error",
+    });
+  }, []);
+
+  const getAllWordsApi = useAsync<TWord[], string>(getAllWords, {
+    handleSuccess: handleLoadSuccess,
+    handleError: handleLoadError,
+  });
+
+  const handleSaveSuccess = React.useCallback((data: TWord[]) => {
+    setWords(data);
+    setFeedback({
+      type: "success",
+      message: "New Word Added",
+    });
+  }, []);
+
+  const handleSaveError = React.useCallback((error: string) => {
+    setFeedback({
+      type: "error",
+      message: error || "Save Failed: Unexpected Error",
+    });
+  }, []);
+
+  const addWordApi = useAsync<TWord[], string>(addWord, {
+    handleSuccess: handleSaveSuccess,
+    handleError: handleSaveError,
+  });
+
+  /** Loads all the words on the first render */
   React.useEffect(() => {
     getAllWordsApi.execute();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  /**
-   * Updates the words list when after `getAllWordsApi` returns new results
-   */
-  React.useEffect(() => {
-    if (getAllWordsApi.value) {
-      setWords(getAllWordsApi.value);
-    }
-  }, [getAllWordsApi.value]);
-
-  /**
-   * Handles `getAllWordsApi`  errors
-   */
-  React.useEffect(() => {
-    if (getAllWordsApi.error) {
-      setFeedback({
-        type: "error",
-        message: getAllWordsApi.error,
-      });
-    }
-  }, [getAllWordsApi.error]);
-
-  /**
-   * Updates the words list when after `addWordApi` returns new results
-   */
-  React.useEffect(() => {
-    if (addWordApi.value) {
-      setWords(addWordApi.value);
-    }
-  }, [addWordApi.value]);
-
-  /**
-   * Updates the feedback based on the `addWordApi` calls statuses
-   */
-  React.useEffect(() => {
-    // OPTIMIZE: this could use a re-usable feedback hook.
-    if (addWordApi.status === AsyncStatuses.SUCCESS) {
-      setFeedback({
-        type: "success",
-        message: "New Word Added",
-      });
-    } else if (addWordApi.status === AsyncStatuses.ERROR) {
-      setFeedback({
-        type: "error",
-        message: addWordApi.error || "Save Failed: Unexpected Error",
-      });
-    }
-  }, [addWordApi.status, addWordApi.error]);
-
+  /** Open the snackbar feedback whenever there is a new api call result */
   React.useEffect(() => {
     if (feedback?.message) {
       setSnackbarOpened(true);
