@@ -408,17 +408,20 @@ function sleep(ms: number) {
 
 export const getAllWords = async (): Promise<TWord[]> => {
   await sleep(200);
+  throwsErrorRandomly();
   return fetchWords();
 };
 
 export const getById = async (id: string): Promise<TWord | undefined> => {
   await sleep(50);
+  throwsErrorRandomly();
   const words = fetchWords();
   return words.find((w) => w.id === id);
 };
 
 export const addWord = async (word: TWord): Promise<TWord[]> => {
   await sleep(200);
+  throwsErrorRandomly();
 
   const rnd = Math.random() * 10;
   if (rnd <= 3) {
@@ -438,13 +441,17 @@ export const addWord = async (word: TWord): Promise<TWord[]> => {
   saveCards(cards);
   return words;
 };
-export const updateWord = async (word: TWord): Promise<TWord[]> => {
-  await sleep(200);
 
-  const rnd = Math.random() * 10;
-  if (rnd <= 3) {
+const throwsErrorRandomly = (percent: number = 5) => {
+  const rnd = Math.random() * 100;
+  if (rnd <= percent) {
     throw new Error("[Testing random backend error]");
   }
+};
+
+export const updateWord = async (word: TWord): Promise<TWord[]> => {
+  await sleep(200);
+  throwsErrorRandomly();
 
   let words = fetchWords();
   words = words.map((currentWord) => {
@@ -461,8 +468,10 @@ export const updateWord = async (word: TWord): Promise<TWord[]> => {
   return words;
 };
 
-export const removeWord = async (word: TWord) => {
+export const deleteWord = async (word: TWord) => {
   await sleep(200);
+  throwsErrorRandomly();
+
   let words = fetchWords();
   words = words.filter((w) => w.id !== word.id);
   saveWords(words);
@@ -471,11 +480,14 @@ export const removeWord = async (word: TWord) => {
 
 export const getAllCards = async (): Promise<TCard[]> => {
   await sleep(200);
+  throwsErrorRandomly();
   return fetchCard();
 };
 
 export const getCards = async (limit: number = 10): Promise<TCard[]> => {
   await sleep(50);
+  throwsErrorRandomly();
+
   // OPTIMIZE: check that limit is a positive number
   const cards = fetchCard();
   const subset = _take(cards, limit);

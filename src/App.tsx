@@ -16,7 +16,7 @@ import AppProcessFeedback from "./components/Layout/AppProcessFeedback";
 import WordDialogForm from "./components/Words/WordDialogForm";
 
 import useAsync from "./hooks/useAsync";
-import { addWord, getAllWords, updateWord } from "./api/words";
+import { addWord, getAllWords, updateWord, deleteWord } from "./api/words";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -69,7 +69,7 @@ const App: React.FC<{}> = () => {
     handleError: handleLoadError,
   });
 
-  const handleSaveSuccess = React.useCallback((data: TWord[]) => {
+  const handleUpdateSuccess = React.useCallback((data: TWord[]) => {
     setWords(data);
 
     setFeedback({
@@ -78,7 +78,7 @@ const App: React.FC<{}> = () => {
     });
   }, []);
 
-  const handleSaveError = React.useCallback((error: string) => {
+  const handleUpdateError = React.useCallback((error: string) => {
     setFeedback({
       type: "error",
       message: error || "Save Failed: Unexpected Error",
@@ -86,12 +86,34 @@ const App: React.FC<{}> = () => {
   }, []);
 
   const addWordApi = useAsync<TWord[], string>(addWord, {
-    handleSuccess: handleSaveSuccess,
-    handleError: handleSaveError,
+    handleSuccess: handleUpdateSuccess,
+    handleError: handleUpdateError,
   });
+
   const updateWordApi = useAsync<TWord[], string>(updateWord, {
-    handleSuccess: handleSaveSuccess,
-    handleError: handleSaveError,
+    handleSuccess: handleUpdateSuccess,
+    handleError: handleUpdateError,
+  });
+
+  const handleDeleteSuccess = React.useCallback((data: TWord[]) => {
+    setWords(data);
+
+    setFeedback({
+      type: "success",
+      message: "Word Removed",
+    });
+  }, []);
+
+  const handleDeleteError = React.useCallback((error: string) => {
+    setFeedback({
+      type: "error",
+      message: error || "Remove Failed: Unexpected Error",
+    });
+  }, []);
+
+  const deleteWordApi = useAsync<TWord[], string>(deleteWord, {
+    handleSuccess: handleDeleteSuccess,
+    handleError: handleDeleteError,
   });
 
   /** Loads all the words on the first render */
@@ -136,7 +158,14 @@ const App: React.FC<{}> = () => {
       } else {
         await addWordApi.execute(selectedWord);
       }
-      setSelectedWord(undefined); // this resets the new word to an empty value
+      setSelectedWord(undefined);
+    }
+  };
+
+  const removeWord = async () => {
+    if (selectedWord) {
+      await deleteWordApi.execute(selectedWord);
+      setSelectedWord(undefined);
     }
   };
 
@@ -184,6 +213,7 @@ const App: React.FC<{}> = () => {
         word={selectedWord}
         handleCloseModal={closeDialog}
         handleSaveClick={saveWord}
+        handleRemoveClick={removeWord}
         handleWordChange={setSelectedWord}
       />
 

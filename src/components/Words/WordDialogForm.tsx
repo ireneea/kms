@@ -19,12 +19,13 @@ type Props = {
   word?: TWord;
   handleCloseModal: () => void;
   handleSaveClick: () => void;
+  handleRemoveClick: () => void;
   handleWordChange: (word: TWord) => void;
 };
 
 const WordDialogForm: React.FC<Props> = (props) => {
   // TODO: validation
-  const { isOpened, handleCloseModal, handleSaveClick, handleWordChange, word } = props;
+  const { isOpened, handleCloseModal, handleSaveClick, handleRemoveClick, handleWordChange, word } = props;
 
   const onConceptChange = (concept: string) => {
     if (word) {
@@ -48,7 +49,9 @@ const WordDialogForm: React.FC<Props> = (props) => {
       }
     }
     return formTitle;
-  }, [word?.id]);
+  }, [word]);
+
+  const isNew = React.useMemo(() => word && !word.id, [word]);
 
   const classes = useStyles();
 
@@ -65,9 +68,14 @@ const WordDialogForm: React.FC<Props> = (props) => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseModal} color="primary">
+          <Button onClick={handleCloseModal} color="default">
             Cancel
           </Button>
+          {isNew ? null : (
+            <Button onClick={handleRemoveClick} color="secondary">
+              Remove
+            </Button>
+          )}
           <Button onClick={handleSaveClick} color="primary">
             Save
           </Button>
