@@ -1,5 +1,7 @@
 import React from "react";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
+import Grid from "@material-ui/core/Grid";
 import List from "@material-ui/core/List";
 
 import { TWord } from "../../ts/appTypes";
@@ -31,11 +33,22 @@ const WordList: React.FC<Props> = ({ words, searchText }) => {
   };
 
   return (
-    <List className={classes.root}>
-      {filterWords().map((word) => (
-        <ListItemLink primary={word.concept} secondary={word.definition} key={word.concept} to={`/words/${word.id}`} />
-      ))}
-    </List>
+    <Container maxWidth="md" className={classes.root}>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <List>
+            {filterWords().map((word) => (
+              <ListItemLink
+                primary={word.concept}
+                secondary={word.definition}
+                key={word.concept}
+                to={`/words/${word.id}`}
+              />
+            ))}
+          </List>
+        </Grid>
+      </Grid>
+    </Container>
   );
 };
 

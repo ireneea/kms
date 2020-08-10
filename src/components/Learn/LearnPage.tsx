@@ -25,6 +25,7 @@ type Prop = {};
  * `LearnPage` Displays a list of the concepts to learn
  */
 const LearnPage: React.FC<Prop> = () => {
+  // TODO: use spaced repetition
   const classes = useStyles();
 
   const [showDefinition, setShowDefinition] = React.useState(false);

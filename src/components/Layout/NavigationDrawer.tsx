@@ -44,6 +44,7 @@ type Props = {
 };
 
 const NavigationDrawer: React.FC<Props> = ({ onAddWord }) => {
+  // OPTIMIZE: highlight selected nav
   const classes = useStyles();
 
   const addWord = {

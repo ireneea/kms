@@ -24,4 +24,11 @@ export enum Answer {
   VERY_WELL,
 }
 
+export enum AsyncStatuses {
+  IDLE,
+  PENDING,
+  SUCCESS,
+  ERROR,
+}
+
 export type TSpacedRepetitionConfig = {};
