@@ -65,16 +65,23 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 type Prop = {
-  /**
-   * we need to shift our app bar to the left when the `NavigationDrawer` is Opened
-   */
+  /** we need to shift our app bar to the left when the `NavigationDrawer` is Opened */
   shiftLeft: boolean;
+  /** function called whenever the search input changes */
+  handleSearchChange: (searchText: string) => void;
+  /** value of the controlled input search */
+  searchText: string;
 };
 
 const Header: React.FC<Prop> = (props) => {
   const classes = useStyles();
 
-  const { shiftLeft } = props;
+  const { shiftLeft, searchText, handleSearchChange } = props;
+
+  const onSearchTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    handleSearchChange(value);
+  };
 
   return (
     <>
@@ -97,6 +104,8 @@ const Header: React.FC<Prop> = (props) => {
                 input: classes.inputInput,
               }}
               inputProps={{ "aria-label": "search" }}
+              value={searchText}
+              onChange={onSearchTextChange}
             />
           </div>
         </Toolbar>

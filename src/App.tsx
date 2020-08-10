@@ -42,6 +42,7 @@ type Feedback = {
 
 const App: React.FC<{}> = () => {
   // TODO: mobile layout
+  // TODO: remove word
   const classes = useStyles();
 
   const [words, setWords] = React.useState((): TWord[] => []);
@@ -50,6 +51,7 @@ const App: React.FC<{}> = () => {
   const [dialogOpened, setDialogOpened] = React.useState(false);
   const [snackbarOpened, setSnackbarOpened] = React.useState(false);
   const [newWord, setNewWord] = React.useState(getEmptyWord);
+  const [searchText, setSearchText] = React.useState("");
 
   const handleLoadSuccess = React.useCallback((data: TWord[]) => {
     setWords(data);
@@ -119,14 +121,20 @@ const App: React.FC<{}> = () => {
     closeDialog();
   };
 
-  // TODO: pass in search text
-  const renderWordsList = React.useCallback(() => <WordList words={words} />, [words]);
+  const renderWordsList = React.useCallback(() => <WordList words={words} searchText={searchText} />, [
+    words,
+    searchText,
+  ]);
+
+  const handleSearchChange = (value: string) => {
+    setSearchText(value);
+  };
 
   return (
     <Router>
       {/** MAIN APPLICATION */}
       <div className={classes.root}>
-        <Header shiftLeft={true} />
+        <Header shiftLeft={true} searchText={searchText} handleSearchChange={handleSearchChange} />
         <NavigationDrawer onAddWord={openDialog} />
         <main className={classes.content}>
           <div className={classes.offset} />

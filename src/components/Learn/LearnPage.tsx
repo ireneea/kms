@@ -31,7 +31,6 @@ const LearnPage: React.FC<Prop> = () => {
   const [cards, setCards] = React.useState((): TCard[] => []);
   const [currentCardIndex, setCurrentCardIndex] = React.useState(0);
 
-  // TODO: handle game over
   const [gameOver, setGameOver] = React.useState(false);
 
   // OPTIMIZE: add a loading indicator
