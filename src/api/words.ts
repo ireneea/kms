@@ -403,14 +403,6 @@ const fetchWords = (): TWord[] => fetchByKey("words");
 const fetchCard = (): TCard[] => fetchByKey("cards");
 
 function sleep(ms: number) {
-  // return new Promise((resolve, reject) => {
-  //   setTimeout(() => {
-  //     const rnd = Math.random() * 10;
-  //     rnd <= 5 ? resolve() : reject("Oh no there was an error 😞");
-  //   }, ms);
-
-  // });
-
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
@@ -444,6 +436,28 @@ export const addWord = async (word: TWord): Promise<TWord[]> => {
   let cards = fetchCard();
   cards = [card, ...cards];
   saveCards(cards);
+  return words;
+};
+export const updateWord = async (word: TWord): Promise<TWord[]> => {
+  await sleep(200);
+
+  const rnd = Math.random() * 10;
+  if (rnd <= 3) {
+    throw new Error("[Testing random backend error]");
+  }
+
+  let words = fetchWords();
+  words = words.map((currentWord) => {
+    let res;
+    if (currentWord.id === word.id) {
+      res = word;
+    } else {
+      res = currentWord;
+    }
+    return res;
+  });
+  saveWords(words);
+
   return words;
 };
 

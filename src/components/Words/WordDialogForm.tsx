@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type Props = {
   isOpened: boolean;
-  word: TWord;
+  word?: TWord;
   handleCloseModal: () => void;
   handleSaveClick: () => void;
   handleWordChange: (word: TWord) => void;
@@ -26,46 +26,42 @@ const WordDialogForm: React.FC<Props> = (props) => {
   // TODO: validation
   const { isOpened, handleCloseModal, handleSaveClick, handleWordChange, word } = props;
 
-  const handleFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = event.target;
-
-    const nextWord = { ...word };
-
-    if (name === "concept") {
-      nextWord.concept = value;
-    } else if (name === "definition") {
-      nextWord.definition = value;
+  const onConceptChange = (concept: string) => {
+    if (word) {
+      handleWordChange({ ...word, concept });
     }
-
-    handleWordChange(nextWord);
   };
+
+  const onDefinitionChange = (definition: string) => {
+    if (word) {
+      word && handleWordChange({ ...word, definition });
+    }
+  };
+
+  const title = React.useMemo(() => {
+    let formTitle = "Word";
+    if (word) {
+      if (word.id) {
+        formTitle = "Update Word";
+      } else {
+        formTitle = "Add New Word";
+      }
+    }
+    return formTitle;
+  }, [word?.id]);
 
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
       <Dialog open={isOpened} onClose={handleCloseModal} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Add New Word</DialogTitle>
+        <DialogTitle id="form-dialog-title">{title}</DialogTitle>
         <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="concept"
-            name="concept"
-            label="Word"
-            fullWidth
-            value={word.concept}
-            onChange={handleFieldChange}
-          />
-          <TextField
-            margin="dense"
-            id="definition"
-            name="definition"
-            label="Definition"
-            fullWidth
-            multiline
-            value={word.definition}
-            onChange={handleFieldChange}
+          <WordForm
+            concept={word?.concept || ""}
+            definition={word?.definition || ""}
+            onConceptChange={onConceptChange}
+            onDefinitionChange={onDefinitionChange}
           />
         </DialogContent>
         <DialogActions>
@@ -78,6 +74,42 @@ const WordDialogForm: React.FC<Props> = (props) => {
         </DialogActions>
       </Dialog>
     </div>
+  );
+};
+
+type WordFormProps = {
+  concept: string;
+  definition: string;
+  onConceptChange: (concept: string) => void;
+  onDefinitionChange: (definition: string) => void;
+};
+
+const WordForm: React.FC<WordFormProps> = (props) => {
+  const { concept, definition, onConceptChange, onDefinitionChange } = props;
+
+  return (
+    <>
+      <TextField
+        autoFocus
+        margin="dense"
+        id="concept"
+        name="concept"
+        label="Word"
+        fullWidth
+        value={concept}
+        onChange={(e) => onConceptChange(e.target.value)}
+      />
+      <TextField
+        margin="dense"
+        id="definition"
+        name="definition"
+        label="Definition"
+        fullWidth
+        multiline
+        value={definition}
+        onChange={(e) => onDefinitionChange(e.target.value)}
+      />
+    </>
   );
 };
 

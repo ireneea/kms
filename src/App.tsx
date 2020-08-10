@@ -16,7 +16,7 @@ import AppProcessFeedback from "./components/Layout/AppProcessFeedback";
 import WordDialogForm from "./components/Words/WordDialogForm";
 
 import useAsync from "./hooks/useAsync";
-import { addWord, getAllWords } from "./api/words";
+import { addWord, getAllWords, updateWord } from "./api/words";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -43,7 +43,6 @@ type Feedback = {
 const App: React.FC<{}> = () => {
   // TODO: mobile layout
   // TODO: remove word
-  // TODO: show selected word on the side
   const classes = useStyles();
 
   const [words, setWords] = React.useState((): TWord[] => []);
@@ -51,7 +50,6 @@ const App: React.FC<{}> = () => {
   const [feedback, setFeedback] = React.useState<Feedback | undefined>(undefined);
   const [dialogOpened, setDialogOpened] = React.useState(false);
   const [snackbarOpened, setSnackbarOpened] = React.useState(false);
-  const [newWord, setNewWord] = React.useState(getEmptyWord);
   const [searchText, setSearchText] = React.useState("");
   const [selectedWord, setSelectedWord] = React.useState<TWord | undefined>(undefined);
 
@@ -73,9 +71,10 @@ const App: React.FC<{}> = () => {
 
   const handleSaveSuccess = React.useCallback((data: TWord[]) => {
     setWords(data);
+
     setFeedback({
       type: "success",
-      message: "New Word Added",
+      message: "Word Saved",
     });
   }, []);
 
@@ -87,6 +86,10 @@ const App: React.FC<{}> = () => {
   }, []);
 
   const addWordApi = useAsync<TWord[], string>(addWord, {
+    handleSuccess: handleSaveSuccess,
+    handleError: handleSaveError,
+  });
+  const updateWordApi = useAsync<TWord[], string>(updateWord, {
     handleSuccess: handleSaveSuccess,
     handleError: handleSaveError,
   });
@@ -104,23 +107,37 @@ const App: React.FC<{}> = () => {
     }
   }, [feedback]);
 
+  React.useEffect(() => {
+    if (selectedWord) {
+      setDialogOpened(true);
+    } else {
+      setDialogOpened(false);
+    }
+  }, [selectedWord]);
+
   const closeDialog = () => {
     setDialogOpened(false);
+    setSelectedWord(undefined);
   };
 
-  const openDialog = () => {
-    setDialogOpened(true);
+  const createNewWord = () => {
+    setSelectedWord(getEmptyWord());
   };
 
   const closeSnackbar = () => {
     setSnackbarOpened(false);
-    setFeedback(undefined); // this just ensures that we always use a new feedback when a new snackbar is opened
   };
 
   const saveWord = async () => {
-    await addWordApi.execute(newWord); // there is no need for error handling here because this should be done in the `useAsync` hook
-    setNewWord(getEmptyWord()); // this resets the new word to an empty value
-    closeDialog();
+    // there is no need for error handling here because this should be done in the `useAsync` hook
+    if (selectedWord) {
+      if (selectedWord.id) {
+        await updateWordApi.execute(selectedWord);
+      } else {
+        await addWordApi.execute(selectedWord);
+      }
+      setSelectedWord(undefined); // this resets the new word to an empty value
+    }
   };
 
   const handleSelectWord = React.useCallback((word: TWord) => {
@@ -143,7 +160,7 @@ const App: React.FC<{}> = () => {
       {/** MAIN APPLICATION */}
       <div className={classes.root}>
         <Header shiftLeft={true} searchText={searchText} handleSearchChange={handleSearchChange} />
-        <NavigationDrawer onAddWord={openDialog} />
+        <NavigationDrawer onAddWord={createNewWord} />
         <main className={classes.content}>
           <div className={classes.offset} />
           <PageContent>
@@ -164,10 +181,10 @@ const App: React.FC<{}> = () => {
       {/** FORM DIALOG */}
       <WordDialogForm
         isOpened={dialogOpened}
-        word={newWord}
+        word={selectedWord}
         handleCloseModal={closeDialog}
         handleSaveClick={saveWord}
-        handleWordChange={setNewWord}
+        handleWordChange={setSelectedWord}
       />
 
       {/** SNACKBAR FEEDBACK */}
