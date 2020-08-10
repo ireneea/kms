@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 
-import { TWord } from "./ts/appTypes";
+import { TWord, AsyncStatuses, Severity } from "./ts/appTypes";
 
 import WordList from "./components/Words/WordList";
 import LearnPage from "./components/Learn/LearnPage";
@@ -12,6 +12,7 @@ import WordDetailsPage from "./components/Words/WordDetailsPage";
 import Header from "./components/Layout/Header";
 import NavigationDrawer from "./components/Layout/NavigationDrawer";
 import PageContent from "./components/Layout/PageContent";
+import AppProcessFeedback from "./components/Layout/AppProcessFeedback";
 import WordDialogForm from "./components/Words/WordDialogForm";
 
 import useAsync from "./hooks/useAsync";
@@ -34,17 +35,25 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const getEmptyWord = (): TWord => ({ concept: "", definition: "" });
 
+type Feedback = {
+  type: Severity;
+  message: string;
+};
+
 const App: React.FC<{}> = () => {
   // TODO: mobile layout
   // TODO: Consolidate api statuses and error in state
   const classes = useStyles();
 
-  const [modalOpened, setModalOpened] = React.useState(false);
+  const [dialogOpened, setDialogOpened] = React.useState(false);
+  const [snackbarOpened, setSnackbarOpened] = React.useState(false);
   const getAllWordsApi = useAsync<TWord[], string>(getAllWords);
   const addWordApi = useAsync<TWord[], string>(addWord);
 
   const [words, setWords] = React.useState((): TWord[] => []);
   const [newWord, setNewWord] = React.useState(getEmptyWord);
+
+  const [feedback, setFeedback] = React.useState<Feedback | undefined>(undefined);
 
   /**
    * Loads all the words on the first render
@@ -67,9 +76,11 @@ const App: React.FC<{}> = () => {
    * Handles `getAllWordsApi`  errors
    */
   React.useEffect(() => {
-    // TODO: handle the error gracefully: we might want to use a snackbar
     if (getAllWordsApi.error) {
-      console.log("getAllWordsApi", getAllWordsApi.error);
+      setFeedback({
+        type: "error",
+        message: getAllWordsApi.error,
+      });
     }
   }, [getAllWordsApi.error]);
 
@@ -83,27 +94,46 @@ const App: React.FC<{}> = () => {
   }, [addWordApi.value]);
 
   /**
-   * Handles `addWordApi`  errors
+   * Updates the feedback based on the `addWordApi` calls statuses
    */
   React.useEffect(() => {
-    // TODO: handle the error gracefully: we might want to use a snackbar
-    if (addWordApi.error) {
-      console.log("addWordApi", addWordApi.error);
+    // OPTIMIZE: this could use a re-usable feedback hook.
+    if (addWordApi.status === AsyncStatuses.SUCCESS) {
+      setFeedback({
+        type: "success",
+        message: "New Word Added",
+      });
+    } else if (addWordApi.status === AsyncStatuses.ERROR) {
+      setFeedback({
+        type: "error",
+        message: addWordApi.error || "Save Failed: Unexpected Error",
+      });
     }
-  }, [addWordApi.error]);
+  }, [addWordApi.status, addWordApi.error]);
 
-  const closeModal = () => {
-    setModalOpened(false);
+  React.useEffect(() => {
+    if (feedback?.message) {
+      setSnackbarOpened(true);
+    }
+  }, [feedback]);
+
+  const closeDialog = () => {
+    setDialogOpened(false);
   };
 
-  const openModal = () => {
-    setModalOpened(true);
+  const openDialog = () => {
+    setDialogOpened(true);
+  };
+
+  const closeSnackbar = () => {
+    setSnackbarOpened(false);
+    setFeedback(undefined); // this just ensures that we always use a new feedback when a new snackbar is opened
   };
 
   const saveWord = async () => {
     await addWordApi.execute(newWord); // there is no need for error handling here because this should be done in the `useAsync` hook
     setNewWord(getEmptyWord()); // this resets the new word to an empty value
-    closeModal();
+    closeDialog();
   };
 
   // TODO: pass in search text
@@ -114,7 +144,7 @@ const App: React.FC<{}> = () => {
       {/** MAIN APPLICATION */}
       <div className={classes.root}>
         <Header shiftLeft={true} />
-        <NavigationDrawer onAddWord={openModal} />
+        <NavigationDrawer onAddWord={openDialog} />
         <main className={classes.content}>
           <div className={classes.offset} />
           <PageContent>
@@ -132,13 +162,21 @@ const App: React.FC<{}> = () => {
         </main>
       </div>
 
-      {/** MODAL DIALOG */}
+      {/** FORM DIALOG */}
       <WordDialogForm
-        isOpened={modalOpened}
+        isOpened={dialogOpened}
         word={newWord}
-        handleCloseModal={closeModal}
+        handleCloseModal={closeDialog}
         handleSaveClick={saveWord}
         handleWordChange={setNewWord}
+      />
+
+      {/** SNACKBAR FEEDBACK */}
+      <AppProcessFeedback
+        isOpened={snackbarOpened}
+        message={feedback?.message || ""}
+        severity={feedback?.type || "info"}
+        handleClose={closeSnackbar}
       />
     </Router>
   );

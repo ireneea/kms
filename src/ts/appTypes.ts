@@ -31,4 +31,6 @@ export enum AsyncStatuses {
   ERROR,
 }
 
+export type Severity = "success" | "info" | "warning" | "error";
+
 export type TSpacedRepetitionConfig = {};

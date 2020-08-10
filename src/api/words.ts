@@ -403,6 +403,14 @@ const fetchWords = (): TWord[] => fetchByKey("words");
 const fetchCard = (): TCard[] => fetchByKey("cards");
 
 function sleep(ms: number) {
+  // return new Promise((resolve, reject) => {
+  //   setTimeout(() => {
+  //     const rnd = Math.random() * 10;
+  //     rnd <= 5 ? resolve() : reject("Oh no there was an error 😞");
+  //   }, ms);
+
+  // });
+
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
@@ -419,6 +427,11 @@ export const getById = async (id: string): Promise<TWord | undefined> => {
 
 export const addWord = async (word: TWord): Promise<TWord[]> => {
   await sleep(200);
+
+  const rnd = Math.random() * 10;
+  if (rnd <= 3) {
+    throw new Error("[Testing random backend error]");
+  }
 
   const newWord = { ...word, id: uuidv4() };
   const card = getNewCard(word);
