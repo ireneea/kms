@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 
-import { TWord, AsyncStatuses, Severity } from "./ts/appTypes";
+import { TWord, Severity } from "./ts/appTypes";
 
 import WordList from "./components/Words/WordList";
 import LearnPage from "./components/Learn/LearnPage";
