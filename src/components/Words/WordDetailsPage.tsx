@@ -2,7 +2,6 @@ import React from "react";
 import { RouteComponentProps } from "react-router-dom";
 
 import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
@@ -16,6 +15,7 @@ import LinkRouter from "../shared/LinkRouter";
 import { getById as getWordById } from "../../api/words";
 
 const useStyles = makeStyles((theme) => ({
+  root: {},
   breadcrumbs: {
     margin: theme.spacing(2, 0),
   },
@@ -49,7 +49,7 @@ const WordDetailsPage: React.FC<RouteComponentProps<Prop>> = (props) => {
   }, [id]);
 
   return (
-    <Container maxWidth="md">
+    <div className={classes.root}>
       <Breadcrumbs aria-label="breadcrumb" className={classes.breadcrumbs}>
         <LinkRouter color="inherit" to="/">
           Words
@@ -71,7 +71,7 @@ const WordDetailsPage: React.FC<RouteComponentProps<Prop>> = (props) => {
           <Button size="small">Learn More</Button>
         </CardActions>
       </Card>
-    </Container>
+    </div>
   );
 };
 

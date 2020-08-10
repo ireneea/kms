@@ -11,6 +11,7 @@ import WordDetailsPage from "./components/Words/WordDetailsPage";
 
 import Header from "./components/Layout/Header";
 import NavigationDrawer from "./components/Layout/NavigationDrawer";
+import PageContent from "./components/Layout/PageContent";
 import WordDialogForm from "./components/Words/WordDialogForm";
 
 import useAsync from "./hooks/useAsync";
@@ -50,6 +51,7 @@ const App: React.FC<{}> = () => {
    */
   React.useEffect(() => {
     getAllWordsApi.execute();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /**
@@ -115,16 +117,18 @@ const App: React.FC<{}> = () => {
         <NavigationDrawer onAddWord={openModal} />
         <main className={classes.content}>
           <div className={classes.offset} />
-          <Switch>
-            <Route exact path="/" component={renderWordsList} />
-            <Route exact path="/words" render={renderWordsList} />
-            <Route exact path="/words/:id" component={WordDetailsPage} />
-            <Route exact path="/learn" component={LearnPage} />
-            {/**
-             * // OPTIMIZE Dashboard page
-             * // OPTIMIZE Stats page
-             */}
-          </Switch>
+          <PageContent>
+            <Switch>
+              <Route exact path="/" component={renderWordsList} />
+              <Route exact path="/words" render={renderWordsList} />
+              <Route exact path="/words/:id" component={WordDetailsPage} />
+              <Route exact path="/learn" component={LearnPage} />
+              {/**
+               * // OPTIMIZE Dashboard page
+               * // OPTIMIZE Stats page
+               */}
+            </Switch>
+          </PageContent>
         </main>
       </div>
 

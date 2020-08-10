@@ -1,7 +1,5 @@
 import React from "react";
 
-import Grid from "@material-ui/core/Grid";
-import Container from "@material-ui/core/Container";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 
 import { Answer, TCard } from "../../ts/appTypes";
@@ -26,6 +24,7 @@ type Prop = {};
  */
 const LearnPage: React.FC<Prop> = () => {
   // TODO: use spaced repetition
+  // OPTIMIZE: rename this to FlashCard
   const classes = useStyles();
 
   const [showDefinition, setShowDefinition] = React.useState(false);
@@ -85,24 +84,18 @@ const LearnPage: React.FC<Prop> = () => {
   const currentCard = getCurrentCard();
 
   return (
-    <Container maxWidth="md" className={classes.root}>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          {currentCard && !gameOver ? (
-            <FlashCard
-              front={currentCard.front}
-              back={currentCard.back}
-              onShowBack={onShowDefinition}
-              showBack={showDefinition}
-              onAnswer={onAnswer}
-            />
-          ) : null}
-          {gameOver && !isApiLoading ? (
-            <CongratulationCard onPracticeMore={onPracticeMore} words={cards.length} />
-          ) : null}
-        </Grid>
-      </Grid>
-    </Container>
+    <div className={classes.root}>
+      {currentCard && !gameOver ? (
+        <FlashCard
+          front={currentCard.front}
+          back={currentCard.back}
+          onShowBack={onShowDefinition}
+          showBack={showDefinition}
+          onAnswer={onAnswer}
+        />
+      ) : null}
+      {gameOver && !isApiLoading ? <CongratulationCard onPracticeMore={onPracticeMore} words={cards.length} /> : null}
+    </div>
   );
 };
 
