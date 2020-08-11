@@ -185,25 +185,27 @@ const App: React.FC<{}> = () => {
   };
 
   return (
-    <Router>
+    <>
       {/** MAIN APPLICATION */}
       <div className={classes.root}>
         <Header shiftLeft={true} searchText={searchText} handleSearchChange={handleSearchChange} />
-        <NavigationDrawer onAddWord={createNewWord} />
-        <main className={classes.content}>
-          <div className={classes.offset} />
-          <PageContent>
-            <Switch>
-              <Route exact path="/" component={renderWordsList} />
-              <Route exact path="/words" render={renderWordsList} />
-              <Route exact path="/learn" component={LearnPage} />
-              {/**
-               * // OPTIMIZE Dashboard page
-               * // OPTIMIZE Stats page
-               */}
-            </Switch>
-          </PageContent>
-        </main>
+        <Router>
+          <NavigationDrawer onAddWord={createNewWord} />
+          <main className={classes.content}>
+            <div className={classes.offset} />
+            <PageContent>
+              <Switch>
+                <Route exact path="/" component={renderWordsList} />
+                <Route exact path="/words" render={renderWordsList} />
+                <Route exact path="/learn" component={LearnPage} />
+                {/**
+                 * // OPTIMIZE Dashboard page
+                 * // OPTIMIZE Stats page
+                 */}
+              </Switch>
+            </PageContent>
+          </main>
+        </Router>
       </div>
 
       {/** FORM DIALOG */}
@@ -222,7 +224,7 @@ const App: React.FC<{}> = () => {
         severity={feedback?.type || "info"}
         handleClose={closeSnackbar}
       />
-    </Router>
+    </>
   );
 };
 
