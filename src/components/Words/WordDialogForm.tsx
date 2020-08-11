@@ -16,26 +16,42 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type Props = {
   isOpened: boolean;
-  word?: TWord;
+  selectedWord?: TWord;
   handleCloseModal: () => void;
-  handleSaveClick: () => void;
+  handleSaveClick: (word: TWord) => void;
   handleRemoveClick: () => void;
-  handleWordChange: (word: TWord) => void;
 };
 
 const WordDialogForm: React.FC<Props> = (props) => {
   // TODO: validation
-  const { isOpened, handleCloseModal, handleSaveClick, handleRemoveClick, handleWordChange, word } = props;
+  const { isOpened, handleCloseModal, handleSaveClick, handleRemoveClick, selectedWord } = props;
+
+  const [word, setWord] = React.useState<TWord | undefined>(undefined);
+
+  /** Resets the local `word` whenever a new selected word is passed */
+  React.useEffect(() => {
+    setWord(selectedWord);
+
+    return () => {
+      setWord(undefined);
+    };
+  }, [selectedWord]);
 
   const onConceptChange = (concept: string) => {
     if (word) {
-      handleWordChange({ ...word, concept });
+      setWord({ ...word, concept });
     }
   };
 
   const onDefinitionChange = (definition: string) => {
     if (word) {
-      word && handleWordChange({ ...word, definition });
+      word && setWord({ ...word, definition });
+    }
+  };
+
+  const onSave = () => {
+    if (word) {
+      handleSaveClick(word);
     }
   };
 
@@ -76,7 +92,7 @@ const WordDialogForm: React.FC<Props> = (props) => {
               Remove
             </Button>
           )}
-          <Button onClick={handleSaveClick} color="primary">
+          <Button onClick={onSave} color="primary">
             Save
           </Button>
         </DialogActions>

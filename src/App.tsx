@@ -148,13 +148,13 @@ const App: React.FC<{}> = () => {
     setSnackbarOpened(false);
   };
 
-  const saveWord = async () => {
+  const saveWord = async (word: TWord) => {
     // there is no need for error handling here because this should be done in the `useAsync` hook
-    if (selectedWord) {
-      if (selectedWord.id) {
-        await updateWordApi.execute(selectedWord);
+    if (word) {
+      if (word.id) {
+        await updateWordApi.execute(word);
       } else {
-        await addWordApi.execute(selectedWord);
+        await addWordApi.execute(word);
       }
       setSelectedWord(undefined);
     }
@@ -207,11 +207,10 @@ const App: React.FC<{}> = () => {
       {/** FORM DIALOG */}
       <WordDialogForm
         isOpened={dialogOpened}
-        word={selectedWord}
+        selectedWord={selectedWord}
         handleCloseModal={closeDialog}
         handleSaveClick={saveWord}
         handleRemoveClick={removeWord}
-        handleWordChange={setSelectedWord}
       />
 
       {/** SNACKBAR FEEDBACK */}

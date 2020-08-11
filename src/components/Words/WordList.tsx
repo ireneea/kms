@@ -62,4 +62,6 @@ const WordList: React.FC<Props> = (props) => {
   );
 };
 
+(WordList as any).whyDidYouRender = true;
+
 export default WordList;
