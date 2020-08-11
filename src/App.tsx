@@ -41,6 +41,8 @@ type Feedback = {
 
 const App: React.FC<{}> = () => {
   // TODO: mobile layout
+  // TODO: optimise desktop layout
+  // TODO: Create topics to group words
   const classes = useStyles();
 
   const [words, setWords] = React.useState((): TWord[] => []);
