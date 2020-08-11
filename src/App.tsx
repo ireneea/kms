@@ -7,7 +7,6 @@ import { TWord, Severity } from "./ts/appTypes";
 
 import WordList from "./components/Words/WordList";
 import LearnPage from "./components/Learn/LearnPage";
-import WordDetailsPage from "./components/Words/WordDetailsPage";
 
 import Header from "./components/Layout/Header";
 import NavigationDrawer from "./components/Layout/NavigationDrawer";
@@ -42,7 +41,6 @@ type Feedback = {
 
 const App: React.FC<{}> = () => {
   // TODO: mobile layout
-  // TODO: remove word
   const classes = useStyles();
 
   const [words, setWords] = React.useState((): TWord[] => []);
@@ -196,7 +194,6 @@ const App: React.FC<{}> = () => {
             <Switch>
               <Route exact path="/" component={renderWordsList} />
               <Route exact path="/words" render={renderWordsList} />
-              <Route exact path="/words/:id" component={WordDetailsPage} />
               <Route exact path="/learn" component={LearnPage} />
               {/**
                * // OPTIMIZE Dashboard page
