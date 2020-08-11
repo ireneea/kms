@@ -38,7 +38,11 @@ const WordList: React.FC<Props> = (props) => {
     let filtered = [...words];
 
     if (searchText) {
-      filtered = words.filter((word) => word.concept.toLowerCase().includes(searchText.toLowerCase()));
+      filtered = words.filter((word) => {
+        const matchConcept = word.concept?.toLowerCase().includes(searchText.toLowerCase());
+
+        return matchConcept;
+      });
     }
 
     return filtered;
