@@ -23,7 +23,7 @@ type Props = {
 };
 
 const WordDialogForm: React.FC<Props> = (props) => {
-  // TODO: validation
+  // OPTIMIZE: instead of just disabling the save button when the word is invalid we should display some validation feedback on the form
   const { isOpened, handleCloseModal, handleSaveClick, handleRemoveClick, selectedWord } = props;
 
   const [word, setWord] = React.useState<TWord | undefined>(undefined);
@@ -51,6 +51,7 @@ const WordDialogForm: React.FC<Props> = (props) => {
 
   const onSave = () => {
     if (word) {
+      // NOTES: after this call the modal is immediately closed by the parent, we do not wait until the word is saved.
       handleSaveClick(word);
     }
   };
@@ -67,7 +68,8 @@ const WordDialogForm: React.FC<Props> = (props) => {
     return formTitle;
   }, [word]);
 
-  const isNew = React.useMemo(() => word && !word.id, [word]);
+  const wordIsNew = React.useMemo(() => word && !word.id, [word]);
+  const wordIsInvalid = React.useMemo(() => !(word && word.concept && word.definition), [word]);
 
   const classes = useStyles();
 
@@ -87,12 +89,12 @@ const WordDialogForm: React.FC<Props> = (props) => {
           <Button onClick={handleCloseModal} color="default">
             Cancel
           </Button>
-          {isNew ? null : (
+          {wordIsNew ? null : (
             <Button onClick={handleRemoveClick} color="secondary">
               Remove
             </Button>
           )}
-          <Button onClick={onSave} color="primary">
+          <Button onClick={onSave} color="primary" disabled={wordIsInvalid}>
             Save
           </Button>
         </DialogActions>

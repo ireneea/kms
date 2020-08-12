@@ -153,19 +153,21 @@ const App: React.FC<{}> = () => {
   const saveWord = async (word: TWord) => {
     // there is no need for error handling here because this should be done in the `useAsync` hook
     if (word) {
+      // NOTES: [[~Why Useful]]:: Setting the selected word as undefined causes the modal to close immediately avoiding double click issues
+      setSelectedWord(undefined);
       if (word.id) {
         await updateWordApi.execute(word);
       } else {
         await addWordApi.execute(word);
       }
-      setSelectedWord(undefined);
     }
   };
 
   const removeWord = async () => {
     if (selectedWord) {
-      await deleteWordApi.execute(selectedWord);
+      // NOTES: [[~Why Useful]]:: Setting the selected word as undefined causes the modal to close immediately avoiding double click issues
       setSelectedWord(undefined);
+      await deleteWordApi.execute(selectedWord);
     }
   };
 
