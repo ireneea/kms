@@ -9,6 +9,7 @@ import Avatar from "@material-ui/core/Avatar";
 import AddIcon from "@material-ui/icons/Add";
 
 import ListItemLink from "../shared/ListItemLink";
+import TopicsTree from "../Topics/TopicsTree";
 
 import { DRAWER_WIDTH } from "../../constants";
 
@@ -72,6 +73,7 @@ const NavigationDrawer: React.FC<Props> = ({ onAddWord }) => {
         <ListItemLink to="/words" primary="Words" secondaryAction={addWord} />
         <ListItemLink to="/learn" primary="Learn" />
       </List>
+      <TopicsTree />
     </Drawer>
   );
 };

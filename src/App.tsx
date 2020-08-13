@@ -197,7 +197,7 @@ const App: React.FC<{}> = () => {
             <div className={classes.offset} />
             <PageContent>
               <Switch>
-                <Route exact path="/" component={renderWordsList} />
+                <Route exact path="/" render={renderWordsList} />
                 <Route exact path="/words" render={renderWordsList} />
                 <Route exact path="/learn" component={LearnPage} />
                 {/**
