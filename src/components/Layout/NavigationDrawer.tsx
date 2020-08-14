@@ -80,6 +80,8 @@ const NavigationDrawer: React.FC<Props> = ({ onAddWord }) => {
         </Typography>
       </div>
       <List>
+        <ListItemLink to="/words" primary="Words" secondaryAction={addWord} />
+        <ListItemLink to="/learn" primary="Learn" />
         <ListItem button onClick={handleClick}>
           <ListItemText primary="Lists" />
         </ListItem>
@@ -88,8 +90,6 @@ const NavigationDrawer: React.FC<Props> = ({ onAddWord }) => {
             <TopicsTree />
           </List>
         </Collapse>
-        <ListItemLink to="/words" primary="Words" secondaryAction={addWord} />
-        <ListItemLink to="/learn" primary="Learn" />
       </List>
     </Drawer>
   );

@@ -1,11 +1,8 @@
 import React from "react";
 import { makeStyles, Theme, createStyles, useTheme } from "@material-ui/core/styles";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 
-import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
-import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
 import Tree, {
   mutateTree,
   moveItemOnTree,
@@ -14,6 +11,8 @@ import Tree, {
   TreeSourcePosition,
   TreeDestinationPosition,
 } from "@atlaskit/tree";
+
+import TopicsTreeIcon from "./TopicsTreeIcon";
 
 import treeData from "./treeData";
 
@@ -33,34 +32,6 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const TreeDot: React.FC<{}> = () => {
-  // OPTIMIZE: add collapse and extension animations
-  const classes = useStyles();
-
-  return (
-    <ListItemIcon className={classes.treeItemIcon}>
-      <span className={classes.dot}>&bull;</span>
-    </ListItemIcon>
-  );
-};
-
-const TreeIcon: React.FC<RenderItemParams> = (props) => {
-  const classes = useStyles();
-  const { item, onExpand, onCollapse } = props;
-
-  const areaLabel = item.isExpanded ? "collapse" : "expand";
-
-  const onClick = () => {
-    item.isExpanded ? onCollapse(item.id) : onExpand(item.id);
-  };
-
-  return (
-    <ListItemIcon onClick={onClick} aria-label={areaLabel} className={classes.treeItemIcon}>
-      {item.isExpanded ? <KeyboardArrowDownIcon fontSize="small" /> : <KeyboardArrowRightIcon fontSize="small" />}
-    </ListItemIcon>
-  );
-};
-
 const TopicsTree = () => {
   const [tree, setTree] = React.useState(treeData);
 
@@ -70,11 +41,10 @@ const TopicsTree = () => {
   const renderItem = React.useCallback((props: RenderItemParams) => {
     const { item, provided } = props;
     const text = item.data ? item.data.title : "";
-    const hasChildren = item.children && item.children.length > 0;
     return (
       <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
         <ListItem className={classes.treeItem} button>
-          {hasChildren ? <TreeIcon {...props} /> : <TreeDot />}
+          <TopicsTreeIcon {...props} />
           <ListItemText primary={text} />
         </ListItem>
       </div>
