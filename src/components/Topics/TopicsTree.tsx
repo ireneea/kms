@@ -15,28 +15,29 @@ const TopicsTree = () => {
   const [tree, setTree] = React.useState(treeData);
 
   const theme = useTheme();
-
   const [open, setOpen] = React.useState(true);
+
+  /** Events handlers */
 
   const handleClick = () => {
     setOpen(!open);
   };
 
-  const onExpand = React.useCallback(
+  const handleExpand = React.useCallback(
     (itemId: ItemId) => {
       setTree(mutateTree(tree, itemId, { isExpanded: true }));
     },
     [tree]
   );
 
-  const onCollapse = React.useCallback(
+  const handleCollapse = React.useCallback(
     (itemId: ItemId) => {
       setTree(mutateTree(tree, itemId, { isExpanded: false }));
     },
     [tree]
   );
 
-  const onDragEnd = React.useCallback(
+  const handleDragEnd = React.useCallback(
     (source: TreeSourcePosition, destination?: TreeDestinationPosition) => {
       if (!destination) {
         return;
@@ -57,9 +58,9 @@ const TopicsTree = () => {
           <Tree
             tree={tree}
             renderItem={TopicsTreeItem}
-            onExpand={onExpand}
-            onCollapse={onCollapse}
-            onDragEnd={onDragEnd}
+            onExpand={handleExpand}
+            onCollapse={handleCollapse}
+            onDragEnd={handleDragEnd}
             offsetPerLevel={theme.spacing(3)}
             isDragEnabled
             isNestingEnabled

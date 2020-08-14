@@ -1,25 +1,29 @@
-import { TWord, TCard } from "../ts/appTypes";
+import { TWord, TCard, TTopic } from "../ts/appTypes";
 import { generateData } from "./generateData";
 
-function sleep(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+function sleep(ms: number, errorPercentage: number = 5) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const rnd = Math.random() * 100;
+      if (rnd <= errorPercentage) {
+        const err = new Error("[Testing random backend error]");
+        reject(err);
+      } else {
+        resolve();
+      }
+    }, ms);
+  });
 }
 
-const throwsErrorRandomly = (percent: number = 5) => {
-  const rnd = Math.random() * 100;
-  if (rnd <= percent) {
-    throw new Error("[Testing random backend error]");
-  }
-};
-
 const initialiseStorage = () => {
-  const { words, cards } = generateData();
+  const { words, cards, topics } = generateData();
 
   saveWords(words);
   saveCards(cards);
+  saveTopics(topics);
 };
 
-const fetchByKey = (key: string) => {
+const fetchByKey = async (key: string) => {
   if (!window.localStorage.getItem(key)) {
     initialiseStorage();
   }
@@ -30,25 +34,18 @@ const fetchByKey = (key: string) => {
     data = JSON.parse(storage);
   }
 
+  await sleep(200);
   return data;
 };
 
-export const fetchWords = async (): Promise<TWord[]> => {
-  await sleep(200);
-  throwsErrorRandomly();
-  return fetchByKey("words");
+const saveByKey = (key: string, data: any) => {
+  window.localStorage.setItem(key, JSON.stringify(data));
 };
 
-export const fetchCard = async (): Promise<TCard[]> => {
-  await sleep(200);
-  throwsErrorRandomly();
-  return fetchByKey("cards");
-};
+export const fetchWords = async (): Promise<TWord[]> => fetchByKey("words");
+export const fetchCards = async (): Promise<TCard[]> => fetchByKey("cards");
+export const fetchTopics = async (): Promise<TTopic[]> => fetchByKey("topics");
 
-export const saveWords = (words: TWord[]) => {
-  window.localStorage.setItem("words", JSON.stringify(words));
-};
-
-export const saveCards = (cards: TCard[]) => {
-  window.localStorage.setItem("cards", JSON.stringify(cards));
-};
+export const saveWords = (words: TWord[]) => saveByKey("words", words);
+export const saveCards = (cards: TCard[]) => saveByKey("cards", cards);
+export const saveTopics = (topics: TTopic[]) => saveByKey("topics", topics);

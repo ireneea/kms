@@ -6,6 +6,7 @@ export type TWord = {
   definition: string;
   example?: string;
   cards?: string[];
+  topics?: string[];
 };
 
 export type TCard = {
@@ -14,6 +15,11 @@ export type TCard = {
   front: string;
   back: string;
   wordId?: string;
+};
+
+export type TTopic = {
+  id?: string;
+  title: string;
 };
 
 export enum Answer {

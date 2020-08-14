@@ -3,6 +3,7 @@ import { TWord } from "../ts/appTypes";
 const DEFAULT_WORDS: TWord[] = [
   {
     id: "agitated",
+    topics: ["emotions"],
     concept: "agitated",
     definition: "physically disturbed or set in motion",
     example:
@@ -10,6 +11,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "astonished",
+    topics: ["emotions"],
     concept: "astonished",
     definition: "filled with the emotional impact of overwhelming surprise",
     example:
@@ -17,6 +19,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "blase",
+    topics: ["emotions"],
     concept: "blase",
     definition: "nonchalantly unconcerned",
     example:
@@ -24,12 +27,14 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "cocky",
+    topics: ["emotions"],
     concept: "cocky",
     definition: "overly self-confident or self-assertive",
     example: '"I bet I got a higher score than you did," Claire says, her voice cocky.Out of My Mind',
   },
   {
     id: "despondent",
+    topics: ["emotions"],
     concept: "despondent",
     definition: "without or almost without hope",
     example:
@@ -37,6 +42,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "disgust",
+    topics: ["emotions"],
     concept: "disgust",
     definition: "strong feelings of dislike",
     example:
@@ -44,6 +50,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "discombobulated",
+    topics: ["emotions"],
     concept: "discombobulated",
     definition: "having self-possession upset; thrown into confusion",
     example:
@@ -51,6 +58,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "dubious",
+    topics: ["emotions"],
     concept: "dubious",
     definition: "fraught with uncertainty or doubt",
     example:
@@ -58,6 +66,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "elation",
+    topics: ["emotions"],
     concept: "elation",
     definition: "a feeling of joy and pride",
     example:
@@ -65,6 +74,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "embarrassment",
+    topics: ["emotions"],
     concept: "embarrassment",
     definition: "the shame felt when inadequacy or guilt is made public",
     example:
@@ -72,6 +82,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "enamored",
+    topics: ["emotions"],
     concept: "enamored",
     definition: "marked by foolish or unreasoning fondness",
     example:
@@ -79,6 +90,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "enraged",
+    topics: ["emotions"],
     concept: "enraged",
     definition: "marked by extreme anger",
     example:
@@ -86,6 +98,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "enthusiasm",
+    topics: ["emotions"],
     concept: "enthusiasm",
     definition: "a feeling of excitement",
     example:
@@ -93,6 +106,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "exultation",
+    topics: ["emotions"],
     concept: "exultation",
     definition: "the utterance of sounds expressing great joy",
     example:
@@ -100,6 +114,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "festive",
+    topics: ["emotions"],
     concept: "festive",
     definition: "offering fun and gaiety",
     example:
@@ -107,6 +122,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "fury",
+    topics: ["emotions"],
     concept: "fury",
     definition: "a feeling of intense anger",
     example:
@@ -114,6 +130,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "gleeful",
+    topics: ["emotions"],
     concept: "gleeful",
     definition: "full of high-spirited delight",
     example:
@@ -121,6 +138,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "grief",
+    topics: ["emotions"],
     concept: "grief",
     definition: "intense sorrow caused by loss of a loved one",
     example:
@@ -128,6 +146,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "hopeful",
+    topics: ["emotions"],
     concept: "hopeful",
     definition: "having or manifesting optimism",
     example:
@@ -135,6 +154,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "hostile",
+    topics: ["emotions"],
     concept: "hostile",
     definition: "characterized by enmity or ill will",
     example:
@@ -142,6 +162,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "indifferent",
+    topics: ["emotions"],
     concept: "indifferent",
     definition: "marked by a lack of interest",
     example:
@@ -149,12 +170,14 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "indignant",
+    topics: ["emotions"],
     concept: "indignant",
     definition: "angered at something unjust or wrong",
     example: "Find out if you're righteously indignant but actually in the wrong",
   },
   {
     id: "irritated",
+    topics: ["emotions"],
     concept: "irritated",
     definition: "aroused to impatience or anger",
     example:
@@ -162,12 +185,14 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "jubilant",
+    topics: ["emotions"],
     concept: "jubilant",
     definition: "full of high-spirited delight",
     example: "Jubilant supporters said it was the best day of their lives as they left the King Power stadium",
   },
   {
     id: "lachrymose",
+    topics: ["emotions"],
     concept: "lachrymose",
     definition: "showing sorrow",
     example:
@@ -175,6 +200,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "listless",
+    topics: ["emotions"],
     concept: "listless",
     definition: "lacking zest or vivacity",
     example:
@@ -182,6 +208,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "livid",
+    topics: ["emotions"],
     concept: "livid",
     definition: "furiously angry",
     example:
@@ -189,6 +216,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "melancholy",
+    topics: ["emotions"],
     concept: "melancholy",
     definition: "a constitutional tendency to be gloomy and depressed",
     example:
@@ -196,6 +224,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "nervous",
+    topics: ["emotions"],
     concept: "nervous",
     definition: "causing or fraught with or showing anxiety",
     example:
@@ -203,6 +232,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "nonchalant",
+    topics: ["emotions"],
     concept: "nonchalant",
     definition: "marked by casual unconcern or indifference",
     example:
@@ -210,6 +240,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "nonplussed",
+    topics: ["emotions"],
     concept: "nonplussed",
     definition: "filled with bewilderment",
     example:
@@ -217,6 +248,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "panic",
+    topics: ["emotions"],
     concept: "panic",
     definition: "an overwhelming feeling of fear and anxiety",
     example:
@@ -224,6 +256,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "pensive",
+    topics: ["emotions"],
     concept: "pensive",
     definition: "deeply or seriously thoughtful",
     example:
@@ -231,6 +264,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "perplexed",
+    topics: ["emotions"],
     concept: "perplexed",
     definition: "full of difficulty or confusion or bewilderment",
     example:
@@ -238,6 +272,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "quizzical",
+    topics: ["emotions"],
     concept: "quizzical",
     definition: "perplexed",
     example:
@@ -245,6 +280,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "rage",
+    topics: ["emotions"],
     concept: "rage",
     definition: "a feeling of intense anger",
     example:
@@ -252,6 +288,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "repugnance",
+    topics: ["emotions"],
     concept: "repugnance",
     definition: "intense aversion",
     example:
@@ -259,6 +296,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "scared",
+    topics: ["emotions"],
     concept: "scared",
     definition: "made afraid",
     example:
@@ -266,6 +304,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "serene",
+    topics: ["emotions"],
     concept: "serene",
     definition: "not agitated",
     example:
@@ -273,6 +312,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "skeptical",
+    topics: ["emotions"],
     concept: "skeptical",
     definition: "marked by or given to doubt",
     example:
@@ -280,6 +320,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "sorrow",
+    topics: ["emotions"],
     concept: "sorrow",
     definition: "an emotion of great sadness associated with loss",
     example:
@@ -287,6 +328,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "stressed",
+    topics: ["emotions"],
     concept: "stressed",
     definition: "suffering severe physical strain",
     example:
@@ -294,6 +336,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "sulky",
+    topics: ["emotions"],
     concept: "sulky",
     definition: "sullen or moody",
     example:
@@ -301,12 +344,14 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "surprise",
+    topics: ["emotions"],
     concept: "surprise",
     definition: "come upon or take unawares",
     example: 'With a look of surprise and anxiety on his face he asked the Lady Nii, "Where are you to take me?"Cosmos',
   },
   {
     id: "timid",
+    topics: ["emotions"],
     concept: "timid",
     definition: "showing fear and lack of courage",
     example:
@@ -314,6 +359,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "triumph",
+    topics: ["emotions"],
     concept: "triumph",
     definition: "a successful ending of a struggle or contest",
     example:
@@ -321,6 +367,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "umbrage",
+    topics: ["emotions"],
     concept: "umbrage",
     definition: "a feeling of anger caused by being offended",
     example:
@@ -328,6 +375,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "vain",
+    topics: ["emotions"],
     concept: "vain",
     definition: "having an exaggerated sense of self-importance",
     example:
@@ -335,6 +383,7 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "weary",
+    topics: ["emotions"],
     concept: "weary",
     definition: "physically and mentally fatigued",
     example:
@@ -342,10 +391,77 @@ const DEFAULT_WORDS: TWord[] = [
   },
   {
     id: "wrath",
+    topics: ["emotions"],
     concept: "wrath",
     definition: "intense anger",
     example:
       "Melissa McCarthy regularly uses her seemingly sweet mien as comedic cover for her ability to unleash monologues of endless and often violently profane  wrath.",
+  },
+  {
+    id: "corporal",
+    topics: ["corp"],
+    concept: "corporal",
+    definition: "affecting the body as opposed to the mind or spirit",
+  },
+  {
+    id: "corporate",
+    topics: ["corp"],
+    concept: "corporate",
+    definition: "of or belonging to a business firm",
+  },
+  {
+    id: "corporation",
+    topics: ["corp"],
+    concept: "corporation",
+    definition: "a business firm recognized by law as a single body",
+  },
+  {
+    id: "corporeal",
+    topics: ["corp"],
+    concept: "corporeal",
+    definition: "having material or physical form or substance",
+  },
+  {
+    id: "corps",
+    topics: ["corp"],
+    concept: "corps",
+    definition: "an army unit usually consisting of two or more divisions",
+  },
+  {
+    id: "corpse",
+    topics: ["corp"],
+    concept: "corpse",
+    definition: "the dead body of a human being",
+  },
+  {
+    id: "corpulent",
+    topics: ["corp"],
+    concept: "corpulent",
+    definition: "excessively fat",
+  },
+  {
+    id: "corpus",
+    topics: ["corp"],
+    concept: "corpus",
+    definition: "a collection of writings",
+  },
+  {
+    id: "corpuscle",
+    topics: ["corp"],
+    concept: "corpuscle",
+    definition: "an unattached cell such as a red or white blood cell",
+  },
+  {
+    id: "habeas corpus",
+    topics: ["corp"],
+    concept: "habeas corpus",
+    definition: "a writ ordering a prisoner to be brought before a judge",
+  },
+  {
+    id: "incorporate",
+    topics: ["corp"],
+    concept: "incorporate",
+    definition: "make into a whole or make part of a whole",
   },
 ];
 

@@ -1,8 +1,8 @@
 import _take from "lodash/take";
 import { v4 as uuidv4 } from "uuid";
 
-import { TWord, TCard } from "../ts/appTypes";
-import { saveCards, saveWords, fetchWords, fetchCard } from "./wordsLocalStorage";
+import { TWord, TCard, TTopic } from "../ts/appTypes";
+import { saveCards, saveWords, fetchWords, fetchCards, fetchTopics } from "./wordsLocalStorage";
 
 import { generateNewCard } from "./generateData";
 
@@ -46,7 +46,7 @@ const WordsApi: EndPoint<TWord> = {
     words = [newWord, ...words];
     saveWords(words);
 
-    let cards = await fetchCard();
+    let cards = await fetchCards();
     cards = [card, ...cards];
     saveCards(cards);
     return words;
@@ -82,8 +82,9 @@ const WordsApi: EndPoint<TWord> = {
   },
 };
 
+/** Cards */
 const CardsApi: EndPoint<TCard> = {
-  getAll: async (): Promise<TCard[]> => fetchCard(),
+  getAll: async (): Promise<TCard[]> => fetchCards(),
   getById: async (id: string): Promise<TCard | undefined> => {
     return undefined;
   },
@@ -94,6 +95,23 @@ const CardsApi: EndPoint<TCard> = {
     return [];
   },
   delete: async (data: TCard): Promise<TCard[]> => {
+    return [];
+  },
+};
+
+/** Topics */
+export const TopicsAPI: EndPoint<TTopic> = {
+  getAll: async (): Promise<TTopic[]> => fetchTopics(),
+  getById: async (id: string): Promise<TTopic | undefined> => {
+    return undefined;
+  },
+  create: async (data: TTopic): Promise<TTopic[]> => {
+    return [];
+  },
+  update: async (data: TTopic): Promise<TTopic[]> => {
+    return [];
+  },
+  delete: async (data: TTopic): Promise<TTopic[]> => {
     return [];
   },
 };

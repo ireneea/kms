@@ -1,8 +1,9 @@
 import moment from "moment";
 import { v4 as uuidv4 } from "uuid";
 
-import { TWord, TCard } from "../ts/appTypes";
+import { TWord, TCard, TTopic } from "../ts/appTypes";
 import DEFAULT_WORDS from "./default_words";
+import DEFAULT_TOPICS from "./default_topics";
 
 export const generateNewCard = (word: TWord): TCard => ({
   id: uuidv4(),
@@ -12,7 +13,7 @@ export const generateNewCard = (word: TWord): TCard => ({
   wordId: word.id,
 });
 
-export const generateData = (): { words: TWord[]; cards: TCard[] } => {
+export const generateData = (): { words: TWord[]; cards: TCard[]; topics: TTopic[] } => {
   const words: TWord[] = [];
   const cards: TCard[] = [];
 
@@ -23,5 +24,5 @@ export const generateData = (): { words: TWord[]; cards: TCard[] } => {
     words.push({ ...word, id: uuidv4(), cards: card.id ? [card.id] : [] });
   }
 
-  return { words, cards };
+  return { words, cards, topics: DEFAULT_TOPICS };
 };
