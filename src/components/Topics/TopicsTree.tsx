@@ -1,55 +1,16 @@
 import React from "react";
-import { makeStyles, Theme, createStyles, useTheme } from "@material-ui/core/styles";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
+import { useTheme } from "@material-ui/core/styles";
 
-import Tree, {
-  mutateTree,
-  moveItemOnTree,
-  RenderItemParams,
-  ItemId,
-  TreeSourcePosition,
-  TreeDestinationPosition,
-} from "@atlaskit/tree";
+import Tree, { mutateTree, moveItemOnTree, ItemId, TreeSourcePosition, TreeDestinationPosition } from "@atlaskit/tree";
 
-import TopicsTreeIcon from "./TopicsTreeIcon";
+import TopicsTreeItem from "./TopicsTreeItem";
 
 import treeData from "./treeData";
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {},
-    treeItem: {},
-    treeItemIcon: {
-      minWidth: 0,
-    },
-    dot: {
-      fontSize: theme.typography.h6.fontSize,
-      width: theme.spacing(2),
-      justifyContent: "center",
-      display: "flex",
-    },
-  })
-);
 
 const TopicsTree = () => {
   const [tree, setTree] = React.useState(treeData);
 
-  const classes = useStyles();
   const theme = useTheme();
-
-  const renderItem = React.useCallback((props: RenderItemParams) => {
-    const { item, provided } = props;
-    const text = item.data ? item.data.title : "";
-    return (
-      <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-        <ListItem className={classes.treeItem} button>
-          <TopicsTreeIcon {...props} />
-          <ListItemText primary={text} />
-        </ListItem>
-      </div>
-    );
-  }, []);
 
   const onExpand = React.useCallback(
     (itemId: ItemId) => {
@@ -79,7 +40,7 @@ const TopicsTree = () => {
   return (
     <Tree
       tree={tree}
-      renderItem={renderItem}
+      renderItem={TopicsTreeItem}
       onExpand={onExpand}
       onCollapse={onCollapse}
       onDragEnd={onDragEnd}
