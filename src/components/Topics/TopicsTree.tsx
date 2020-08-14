@@ -1,141 +1,82 @@
-import React, { Component } from "react";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import React from "react";
+import { makeStyles, Theme, createStyles, useTheme } from "@material-ui/core/styles";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
 
+import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
 import Tree, {
   mutateTree,
   moveItemOnTree,
   RenderItemParams,
-  TreeItem,
-  TreeData,
   ItemId,
   TreeSourcePosition,
   TreeDestinationPosition,
 } from "@atlaskit/tree";
 
+import treeData from "./treeData";
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {},
+    treeItem: {},
     treeItemIcon: {
-      display: "inline-block",
-      width: "16px",
+      minWidth: 0,
+    },
+    dot: {
+      fontSize: theme.typography.h6.fontSize,
+      width: theme.spacing(2),
       justifyContent: "center",
-      cursor: "pointer",
+      display: "flex",
     },
   })
 );
 
-const treeWithTwoBranches: TreeData = {
-  rootId: "1",
-  items: {
-    "1": {
-      id: "1",
-      children: ["1-1", "1-2"],
-      hasChildren: true,
-      isExpanded: true,
-      isChildrenLoading: false,
-      data: {
-        title: "root",
-      },
-    },
-    "1-1": {
-      id: "1-1",
-      children: ["1-1-1", "1-1-2"],
-      hasChildren: true,
-      isExpanded: true,
-      isChildrenLoading: false,
-      data: {
-        title: "First parent",
-      },
-    },
-    "1-2": {
-      id: "1-2",
-      children: ["1-2-1", "1-2-2"],
-      hasChildren: true,
-      isExpanded: true,
-      isChildrenLoading: false,
-      data: {
-        title: "Second parent",
-      },
-    },
-    "1-1-1": {
-      id: "1-1-1",
-      children: [],
-      hasChildren: false,
-      isExpanded: false,
-      isChildrenLoading: false,
-      data: {
-        title: "Child one",
-      },
-    },
-    "1-1-2": {
-      id: "1-1-2",
-      children: [],
-      hasChildren: false,
-      isExpanded: false,
-      isChildrenLoading: false,
-      data: {
-        title: "Child two",
-      },
-    },
-    "1-2-1": {
-      id: "1-2-1",
-      children: [],
-      hasChildren: false,
-      isExpanded: false,
-      isChildrenLoading: false,
-      data: {
-        title: "Child three",
-      },
-    },
-    "1-2-2": {
-      id: "1-2-2",
-      children: [],
-      hasChildren: false,
-      isExpanded: false,
-      isChildrenLoading: false,
-      data: {
-        title: "Child four",
-      },
-    },
-  },
-};
-
-const PADDING_PER_LEVEL = 16;
-
-const TreeItemIcon: React.FC<{ onClick?: () => void }> = (props) => {
+const TreeDot: React.FC<{}> = () => {
+  // OPTIMIZE: add collapse and extension animations
   const classes = useStyles();
-  const { onClick } = props;
 
   return (
-    <span className={classes.treeItemIcon} onClick={onClick}>
-      {props.children}
-    </span>
+    <ListItemIcon className={classes.treeItemIcon}>
+      <span className={classes.dot}>&bull;</span>
+    </ListItemIcon>
   );
 };
 
-type State = {
-  tree: TreeData;
-};
+const TreeIcon: React.FC<RenderItemParams> = (props) => {
+  const classes = useStyles();
+  const { item, onExpand, onCollapse } = props;
 
-const getIcon = (item: TreeItem, onExpand: (itemId: ItemId) => void, onCollapse: (itemId: ItemId) => void) => {
-  if (item.children && item.children.length > 0) {
-    return item.isExpanded ? (
-      <TreeItemIcon onClick={() => onCollapse(item.id)}>-</TreeItemIcon>
-    ) : (
-      <TreeItemIcon onClick={() => onExpand(item.id)}>+</TreeItemIcon>
-    );
-  }
-  return <TreeItemIcon>&bull;</TreeItemIcon>;
+  const areaLabel = item.isExpanded ? "collapse" : "expand";
+
+  const onClick = () => {
+    item.isExpanded ? onCollapse(item.id) : onExpand(item.id);
+  };
+
+  return (
+    <ListItemIcon onClick={onClick} aria-label={areaLabel} className={classes.treeItemIcon}>
+      {item.isExpanded ? <KeyboardArrowDownIcon fontSize="small" /> : <KeyboardArrowRightIcon fontSize="small" />}
+    </ListItemIcon>
+  );
 };
 
 const TopicsTree = () => {
-  const [tree, setTree] = React.useState(treeWithTwoBranches);
+  const [tree, setTree] = React.useState(treeData);
 
-  const renderItem = React.useCallback(({ item, onExpand, onCollapse, provided }: RenderItemParams) => {
+  const classes = useStyles();
+  const theme = useTheme();
+
+  const renderItem = React.useCallback((props: RenderItemParams) => {
+    const { item, provided } = props;
+    const text = item.data ? item.data.title : "";
+    const hasChildren = item.children && item.children.length > 0;
     return (
       <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-        <span>{getIcon(item, onExpand, onCollapse)}</span>
-        <span>{item.data ? item.data.title : ""}</span>
+        <ListItem className={classes.treeItem} button>
+          {hasChildren ? <TreeIcon {...props} /> : <TreeDot />}
+          <ListItemText primary={text} />
+        </ListItem>
       </div>
     );
   }, []);
@@ -166,17 +107,16 @@ const TopicsTree = () => {
   );
 
   return (
-    <div style={{ marginLeft: 15 }}>
-      <Tree
-        tree={tree}
-        renderItem={renderItem}
-        onExpand={onExpand}
-        onCollapse={onCollapse}
-        onDragEnd={onDragEnd}
-        offsetPerLevel={PADDING_PER_LEVEL}
-        isDragEnabled
-      />
-    </div>
+    <Tree
+      tree={tree}
+      renderItem={renderItem}
+      onExpand={onExpand}
+      onCollapse={onCollapse}
+      onDragEnd={onDragEnd}
+      offsetPerLevel={theme.spacing(3)}
+      isDragEnabled
+      isNestingEnabled
+    />
   );
 };
 

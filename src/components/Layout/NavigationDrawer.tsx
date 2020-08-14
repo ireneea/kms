@@ -7,6 +7,10 @@ import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
 import AddIcon from "@material-ui/icons/Add";
+import Collapse from "@material-ui/core/Collapse";
+
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
 
 import ListItemLink from "../shared/ListItemLink";
 import TopicsTree from "../Topics/TopicsTree";
@@ -54,6 +58,12 @@ const NavigationDrawer: React.FC<Props> = ({ onAddWord }) => {
     icon: <AddIcon />,
   };
 
+  const [open, setOpen] = React.useState(true);
+
+  const handleClick = () => {
+    setOpen(!open);
+  };
+
   return (
     <Drawer
       className={classes.drawer}
@@ -70,10 +80,17 @@ const NavigationDrawer: React.FC<Props> = ({ onAddWord }) => {
         </Typography>
       </div>
       <List>
+        <ListItem button onClick={handleClick}>
+          <ListItemText primary="Lists" />
+        </ListItem>
+        <Collapse in={open} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <TopicsTree />
+          </List>
+        </Collapse>
         <ListItemLink to="/words" primary="Words" secondaryAction={addWord} />
         <ListItemLink to="/learn" primary="Learn" />
       </List>
-      <TopicsTree />
     </Drawer>
   );
 };
