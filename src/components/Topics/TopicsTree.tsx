@@ -1,5 +1,9 @@
 import React from "react";
 import { useTheme } from "@material-ui/core/styles";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import Collapse from "@material-ui/core/Collapse";
 
 import Tree, { mutateTree, moveItemOnTree, ItemId, TreeSourcePosition, TreeDestinationPosition } from "@atlaskit/tree";
 
@@ -11,6 +15,12 @@ const TopicsTree = () => {
   const [tree, setTree] = React.useState(treeData);
 
   const theme = useTheme();
+
+  const [open, setOpen] = React.useState(true);
+
+  const handleClick = () => {
+    setOpen(!open);
+  };
 
   const onExpand = React.useCallback(
     (itemId: ItemId) => {
@@ -38,16 +48,25 @@ const TopicsTree = () => {
   );
 
   return (
-    <Tree
-      tree={tree}
-      renderItem={TopicsTreeItem}
-      onExpand={onExpand}
-      onCollapse={onCollapse}
-      onDragEnd={onDragEnd}
-      offsetPerLevel={theme.spacing(3)}
-      isDragEnabled
-      isNestingEnabled
-    />
+    <>
+      <ListItem button onClick={handleClick}>
+        <ListItemText primary="Topics" />
+      </ListItem>
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          <Tree
+            tree={tree}
+            renderItem={TopicsTreeItem}
+            onExpand={onExpand}
+            onCollapse={onCollapse}
+            onDragEnd={onDragEnd}
+            offsetPerLevel={theme.spacing(3)}
+            isDragEnabled
+            isNestingEnabled
+          />
+        </List>
+      </Collapse>
+    </>
   );
 };
 
