@@ -51,6 +51,7 @@ const doesWordMatchTopic = (word: TWord, topicId: string = "") => {
 };
 
 const WordList: React.FC<Props> = (props) => {
+  // TODO: display topic header
   const classes = useStyles();
   const { topic } = useParams();
   const { words, searchText, handleSelectWord, selectedWord } = props;

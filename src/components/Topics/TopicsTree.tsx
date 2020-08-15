@@ -60,6 +60,8 @@ const buildTopicsTree = (topics: TTopic[] = []): TreeData => {
 };
 
 const TopicsTree = () => {
+  // TODO: make tree draggable
+  // TODO: make tree nestable
   const [tree, setTree] = React.useState(buildTopicsTree);
 
   const theme = useTheme();
