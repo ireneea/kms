@@ -14,6 +14,7 @@ import Tree, {
   TreeSourcePosition,
   TreeDestinationPosition,
 } from "@atlaskit/tree";
+import { useHistory } from "react-router-dom";
 
 import TopicsTreeItem from "./TopicsTreeItem";
 
@@ -67,8 +68,12 @@ const TopicsTree = () => {
     handleSuccess: (data) => setTree(buildTopicsTree(data)),
   });
 
+  const history = useHistory();
+
   React.useEffect(() => {
     topicsLoader.execute();
+    // this insures that the load is is triggered only once
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /** Events handlers */
@@ -101,6 +106,13 @@ const TopicsTree = () => {
     [tree]
   );
 
+  const handleSelectItem = (item: TreeItem) => {
+    const id = `${item?.data.id || ""}`;
+    if (id) {
+      history.push(`/words/${id}`);
+    }
+  };
+
   return (
     <>
       <ListItem button onClick={handleClick}>
@@ -110,7 +122,7 @@ const TopicsTree = () => {
         <List component="div" disablePadding>
           <Tree
             tree={tree}
-            renderItem={TopicsTreeItem}
+            renderItem={(itemParams) => <TopicsTreeItem itemParams={itemParams} onItemSelect={handleSelectItem} />}
             onExpand={handleExpand}
             onCollapse={handleCollapse}
             onDragEnd={handleDragEnd}

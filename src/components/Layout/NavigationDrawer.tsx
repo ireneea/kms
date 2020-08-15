@@ -70,8 +70,8 @@ const NavigationDrawer: React.FC<Props> = ({ onAddWord }) => {
         </Typography>
       </div>
       <List>
-        <ListItemLink to="/words" primary="Words" secondaryAction={addWord} />
         <ListItemLink to="/learn" primary="Learn" />
+        <ListItemLink to="/words" primary="All Words" secondaryAction={addWord} />
         <TopicsTree />
       </List>
     </Drawer>

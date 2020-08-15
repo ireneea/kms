@@ -198,7 +198,7 @@ const App: React.FC<{}> = () => {
             <PageContent>
               <Switch>
                 <Route exact path="/" render={renderWordsList} />
-                <Route exact path="/words" render={renderWordsList} />
+                <Route path="/words/:topic?" render={renderWordsList} />
                 <Route exact path="/learn" component={LearnPage} />
                 {/**
                  * // OPTIMIZE Dashboard page

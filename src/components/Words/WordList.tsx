@@ -4,6 +4,8 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 
+import { useParams } from "react-router-dom";
+
 import { TWord } from "../../ts/appTypes";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -30,27 +32,49 @@ const isWordSelected = (selected: TWord | undefined, current: TWord | undefined)
   return isSelected;
 };
 
+const doesWordMatchSearchText = (word: TWord, searchText: string = "") => {
+  let matchConcept = true;
+  if (searchText) {
+    matchConcept = word.concept?.toLowerCase().includes(searchText.toLowerCase());
+  }
+
+  return matchConcept;
+};
+
+const doesWordMatchTopic = (word: TWord, topicId: string = "") => {
+  let matchTopic = true;
+  if (topicId && word.topics && word.topics.length > 0) {
+    matchTopic = word.topics.includes(topicId);
+  }
+
+  return matchTopic;
+};
+
 const WordList: React.FC<Props> = (props) => {
   const classes = useStyles();
+  const { topic } = useParams();
   const { words, searchText, handleSelectWord, selectedWord } = props;
 
-  const filterWords = (): TWord[] => {
+  const [filteredWords, setFilteredWords] = React.useState<TWord[]>([]);
+
+  React.useEffect(() => {
     let filtered = [...words];
 
-    if (searchText) {
+    if (searchText || topic) {
       filtered = words.filter((word) => {
-        const matchConcept = word.concept?.toLowerCase().includes(searchText.toLowerCase());
+        const matchConcept = doesWordMatchSearchText(word, searchText);
+        const matchTopic = doesWordMatchTopic(word, topic);
 
-        return matchConcept;
+        return matchTopic && matchConcept;
       });
     }
 
-    return filtered;
-  };
+    setFilteredWords(filtered);
+  }, [words, searchText, selectedWord, topic]);
 
   return (
     <List className={classes.root}>
-      {filterWords().map((word) => {
+      {filteredWords.map((word) => {
         return (
           <ListItem
             button
@@ -65,7 +89,5 @@ const WordList: React.FC<Props> = (props) => {
     </List>
   );
 };
-
-(WordList as any).whyDidYouRender = true;
 
 export default WordList;

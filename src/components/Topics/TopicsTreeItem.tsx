@@ -3,16 +3,24 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import TopicsTreeIcon from "./TopicsTreeIcon";
 
-import { RenderItemParams } from "@atlaskit/tree";
+import { RenderItemParams, TreeItem } from "@atlaskit/tree";
 
-const TopicsTreeItem: React.FC<RenderItemParams> = (props) => {
-  const { item, provided } = props;
-  const text = item.data ? item.data.title : "";
+type TopicsTreeItemProps = {
+  itemParams: RenderItemParams;
+  onItemSelect: (item: TreeItem) => void;
+};
+
+const TopicsTreeItem: React.FC<TopicsTreeItemProps> = (props) => {
+  const { itemParams, onItemSelect } = props;
+  const { item, provided } = itemParams;
+
+  const text = item?.data.title || "";
+
   return (
     <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-      <ListItem button>
-        <TopicsTreeIcon {...props} />
-        <ListItemText primary={text} />
+      <ListItem button aria-label={`select ${text} topic`}>
+        <TopicsTreeIcon {...itemParams} />
+        <ListItemText primary={text} onClick={() => onItemSelect(item)} />
       </ListItem>
     </div>
   );
