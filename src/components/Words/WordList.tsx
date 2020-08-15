@@ -4,9 +4,7 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 
-import { useParams } from "react-router-dom";
-
-import { TWord } from "../../ts/appTypes";
+import { TWord, TTopic } from "../../ts/appTypes";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -15,11 +13,12 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-type Props = {
+type WordListProps = {
   words: TWord[];
   searchText?: string;
   handleSelectWord: (word: TWord) => void;
   selectedWord: TWord | undefined;
+  topic?: TTopic;
 };
 
 const isWordSelected = (selected: TWord | undefined, current: TWord | undefined) => {
@@ -41,34 +40,29 @@ const doesWordMatchSearchText = (word: TWord, searchText: string = "") => {
   return matchConcept;
 };
 
-const doesWordMatchTopic = (word: TWord, topicId: string = "") => {
+const doesWordMatchTopic = (word: TWord, topic?: TTopic) => {
   let matchTopic = true;
-  if (topicId) {
-    matchTopic = !!word.topics && word.topics.length > 0 && word.topics.includes(topicId);
+  if (topic && topic.id) {
+    matchTopic = !!word.topics && word.topics.length > 0 && word.topics.includes(topic.id);
   }
 
   return matchTopic;
 };
 
-const WordList: React.FC<Props> = (props) => {
+const WordList: React.FC<WordListProps> = (props) => {
   // TODO: display topic header
   const classes = useStyles();
-  const { topic } = useParams();
-  const { words, searchText, handleSelectWord, selectedWord } = props;
+  const { topic, words, searchText, handleSelectWord, selectedWord } = props;
 
   const [filteredWords, setFilteredWords] = React.useState<TWord[]>([]);
 
   React.useEffect(() => {
-    let filtered = [...words];
+    const filtered = words.filter((word) => {
+      const matchConcept = doesWordMatchSearchText(word, searchText);
+      const matchTopic = doesWordMatchTopic(word, topic);
 
-    if (searchText || topic) {
-      filtered = words.filter((word) => {
-        const matchConcept = doesWordMatchSearchText(word, searchText);
-        const matchTopic = doesWordMatchTopic(word, topic);
-
-        return matchTopic && matchConcept;
-      });
-    }
+      return matchTopic && matchConcept;
+    });
 
     setFilteredWords(filtered);
   }, [words, searchText, selectedWord, topic]);

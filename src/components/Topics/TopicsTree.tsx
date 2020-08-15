@@ -14,7 +14,6 @@ import Tree, {
   TreeSourcePosition,
   TreeDestinationPosition,
 } from "@atlaskit/tree";
-import { useHistory } from "react-router-dom";
 
 import TopicsTreeItem from "./TopicsTreeItem";
 
@@ -59,7 +58,11 @@ const buildTopicsTree = (topics: TTopic[] = []): TreeData => {
   return tree;
 };
 
-const TopicsTree = () => {
+interface TopicsTreeProps {
+  onSelectTopic: (topic: TTopic) => void;
+}
+
+const TopicsTree: React.FC<TopicsTreeProps> = (props) => {
   // TODO: make tree draggable
   // TODO: make tree nestable
   const [tree, setTree] = React.useState(buildTopicsTree);
@@ -69,8 +72,6 @@ const TopicsTree = () => {
   const topicsLoader = useAsync(TopicsAPI.getAll, {
     handleSuccess: (data) => setTree(buildTopicsTree(data)),
   });
-
-  const history = useHistory();
 
   React.useEffect(() => {
     topicsLoader.execute();
@@ -109,9 +110,9 @@ const TopicsTree = () => {
   );
 
   const handleSelectItem = (item: TreeItem) => {
-    const id = `${item?.data.id || ""}`;
-    if (id) {
-      history.push(`/words/${id}`);
+    const { onSelectTopic } = props;
+    if (item.id && item.data) {
+      onSelectTopic(item.data);
     }
   };
 

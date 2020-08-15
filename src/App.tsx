@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 
-import { TWord, Severity } from "./ts/appTypes";
+import { TWord, Severity, TTopic } from "./ts/appTypes";
 
 import WordList from "./components/Words/WordList";
 import LearnPage from "./components/Learn/LearnPage";
@@ -16,6 +16,7 @@ import WordDialogForm from "./components/Words/WordDialogForm";
 
 import useAsync from "./hooks/useAsync";
 import { addWord, getAllWords, updateWord, deleteWord } from "./api/words";
+import WordForm from "./components/Words/WordForm";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -44,15 +45,18 @@ const App: React.FC<{}> = () => {
   // TODO: optimise desktop layout
   // TODO: Add new topic
   // TODO: Add word to topic
+  // OPTIMIZE: add topic slugs to the route so that we can immediately select a topic
   const classes = useStyles();
 
   const [words, setWords] = React.useState((): TWord[] => []);
   // OPTIMIZE: create a useFeedback hook and maybe combine it with the `AppProcessFeedback` component
+  // TODO: combine async calls in a single manager
   const [feedback, setFeedback] = React.useState<Feedback | undefined>(undefined);
   const [dialogOpened, setDialogOpened] = React.useState(false);
   const [snackbarOpened, setSnackbarOpened] = React.useState(false);
   const [searchText, setSearchText] = React.useState("");
   const [selectedWord, setSelectedWord] = React.useState<TWord | undefined>(undefined);
+  const [selectedTopic, setSelectedTopic] = React.useState<TTopic | undefined>(undefined);
 
   const handleLoadSuccess = React.useCallback((data: TWord[]) => {
     setWords(data);
@@ -178,13 +182,23 @@ const App: React.FC<{}> = () => {
 
   const renderWordsList = React.useCallback(
     () => (
-      <WordList words={words} searchText={searchText} handleSelectWord={handleSelectWord} selectedWord={selectedWord} />
+      <WordList
+        words={words}
+        searchText={searchText}
+        handleSelectWord={handleSelectWord}
+        selectedWord={selectedWord}
+        topic={selectedTopic}
+      />
     ),
-    [words, searchText, handleSelectWord, selectedWord]
+    [words, searchText, handleSelectWord, selectedWord, selectedTopic]
   );
 
   const handleSearchChange = (value: string) => {
     setSearchText(value);
+  };
+
+  const handleSelectTopic = (topic: TTopic) => {
+    setSelectedTopic(topic);
   };
 
   return (
@@ -193,13 +207,14 @@ const App: React.FC<{}> = () => {
       <div className={classes.root}>
         <Header shiftLeft={true} searchText={searchText} handleSearchChange={handleSearchChange} />
         <Router>
-          <NavigationDrawer onAddWord={createNewWord} />
+          <NavigationDrawer onAddWord={createNewWord} onSelectTopic={handleSelectTopic} />
           <main className={classes.content}>
             <div className={classes.offset} />
             <PageContent>
+              <WordForm topicId={selectedTopic?.id} topicTitle={selectedTopic?.title} saveWord={saveWord} />
               <Switch>
                 <Route exact path="/" render={renderWordsList} />
-                <Route path="/words/:topic?" render={renderWordsList} />
+                <Route exact path="/words" render={renderWordsList} />
                 <Route exact path="/learn" component={LearnPage} />
                 {/**
                  * // OPTIMIZE Dashboard page

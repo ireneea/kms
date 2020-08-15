@@ -12,6 +12,7 @@ type Options = {
  */
 const useAsync = <T, E = string>(asyncFunction: (...args: any) => Promise<T>, options?: Options) => {
   // OPTIMIZE: include an options parameter to specify { handleError, handleSuccess, immediate}
+  // OPTIMIZE: define the arguments that need to be passed to the the execute function in the typescript
   const { handleError, handleSuccess } = options || {};
 
   const [status, setStatus] = useState(AsyncStatuses.IDLE);

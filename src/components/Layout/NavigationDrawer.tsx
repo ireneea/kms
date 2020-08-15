@@ -12,6 +12,7 @@ import ListItemLink from "../shared/ListItemLink";
 import TopicsTree from "../Topics/TopicsTree";
 
 import { DRAWER_WIDTH } from "../../constants";
+import { TTopic } from "../../ts/appTypes";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -42,9 +43,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type Props = {
   onAddWord: () => void;
+  onSelectTopic: (topic: TTopic) => void;
 };
 
-const NavigationDrawer: React.FC<Props> = ({ onAddWord }) => {
+const NavigationDrawer: React.FC<Props> = ({ onAddWord, onSelectTopic }) => {
   // OPTIMIZE: highlight selected nav
   const classes = useStyles();
 
@@ -72,7 +74,7 @@ const NavigationDrawer: React.FC<Props> = ({ onAddWord }) => {
       <List>
         <ListItemLink to="/learn" primary="Learn" />
         <ListItemLink to="/words" primary="All Words" secondaryAction={addWord} />
-        <TopicsTree />
+        <TopicsTree onSelectTopic={onSelectTopic} />
       </List>
     </Drawer>
   );
