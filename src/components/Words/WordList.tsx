@@ -43,8 +43,8 @@ const doesWordMatchSearchText = (word: TWord, searchText: string = "") => {
 
 const doesWordMatchTopic = (word: TWord, topicId: string = "") => {
   let matchTopic = true;
-  if (topicId && word.topics && word.topics.length > 0) {
-    matchTopic = word.topics.includes(topicId);
+  if (topicId) {
+    matchTopic = !!word.topics && word.topics.length > 0 && word.topics.includes(topicId);
   }
 
   return matchTopic;
